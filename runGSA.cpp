@@ -184,12 +184,7 @@ vector<double> runGSA::doGSA(vector<double> gval,char Opt)
 				mat muval = muk.col(k);
 				muki.subvec(k, k) = mug(k) + SiginvSig.slice(k) * (xi - muval);
 				pik_tmp(k) = pi(k) * mvnPdf(xi, muval, cov.subcube(0, 0, k, endx, endx, k));
-				
-				if ((isinf(pik_tmp(k))) || (isnan(pik_tmp(k))))
-				{
-					pik_tmp(k) = 1.e10;
-					continue;
-				}
+
 				//double a = mvnPdf(xi, muval, cov.subcube(0, 0, k, endx, endx, k));
 				//mat v = cov.subcube(0, 0, k, endx, endx, k);
 			}

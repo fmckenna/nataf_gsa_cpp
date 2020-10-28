@@ -11,7 +11,7 @@
 using std::vector;
 
 extern std::ofstream theErrorFile; // Error log
-//double nnlLogn(unsigned n, const double* x, double* grad, void* my_func_data);
+//double nnlLogn(unsignxed n, const double* x, double* grad, void* my_func_data);
 
 lognormalDist::lognormalDist(string opt, vector<double> val, vector<double> add) 
 {

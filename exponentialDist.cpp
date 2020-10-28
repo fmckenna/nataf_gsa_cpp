@@ -14,7 +14,7 @@ double nnlExponential(unsigned n, const double* x, double* grad, void* my_func_d
 
 exponentialDist::exponentialDist(string opt, vector<double> val, vector<double> add)
 {
-	name = "Exponential";
+	name = "exponential";
 	if (opt.compare("PAR") == 0)
 	{
 		if (val.size() != 1)
