@@ -65,7 +65,7 @@ int main(void)
 	//	Global sensitivity analysis
 	//
 
-	int Kos = 15;
+	int Kos = 25;
 	runGSA GsaResults(xvals, gvals, inp.groups, Kos); 
 	
 	vector<vector<double>> Si = GsaResults.Simat;
