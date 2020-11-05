@@ -26,12 +26,19 @@ public:
 	vector<vector<double>> U2X(int nmc, vector<vector<double>> u);
 	//ERADist **M_;
 	vector<ERADist> M;
-	void simulateApp(string osType, 
-					string runType, 
-					jsonInput inp, 
-					vector<vector<double>> u, 
-					vector<vector<double>> &xvals, 
-					vector<vector<double>> &gvals);
+	void simulateAppBatch(string osType, 
+						 string runType, 
+						 jsonInput inp, 
+					 	 vector<vector<double>> u, 
+						 vector<vector<double>> &xvals, 
+						 vector<vector<double>> &gvals);
+	void simulateAppSequential(string osType,
+						string runType,
+						jsonInput inp,
+						vector<vector<double>> u,
+						vector<vector<double>>& xvals,
+						vector<vector<double>>& gvals,
+						int idx);
 
 private:
 	const double PI = 3.1415926535897932384626433;

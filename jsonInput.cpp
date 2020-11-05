@@ -6,12 +6,20 @@ jsonInput::jsonInput(string workDir)
 	this->workDir = workDir;
 	std::ifstream myfile(workDir + "/templatedir/dakota.json");
 	if (!myfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to open dakota.json";
+		theErrorFile << "Error running UQ engine: Unable to open JSON";
 		theErrorFile.close();
 		exit(-1);
 	}
 
-	json UQjson = json::parse(myfile);
+	json UQjson = json::parse(myfile, nullptr, false);
+	if (UQjson.is_discarded())
+	{
+		theErrorFile << "Error reading json: JSON syntax is broken" << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	//json UQjson = json::parse(myfile);
 
 	// 
 	// Get variables
@@ -97,11 +105,15 @@ jsonInput::jsonInput(string workDir)
 			while (data_table >> samps)
 			{ 
 				vals_tmp.push_back(samps);
+				if (data_table.peek() == ',')
+					data_table.ignore();
 			}
 			data_table.close();
 			vals.push_back(vals_tmp);
 
 			if (vals_tmp.size() < 3) { //*ERROR*
+				int a = vals_tmp.size();
+				std::cout << a << std::endl;
 				theErrorFile << "Error reading json: data file of " << rvNames[nrv] << " has less then three samples." << std::endl;
 				theErrorFile.close();
 				exit(-1);
@@ -140,7 +152,17 @@ jsonInput::jsonInput(string workDir)
 				std::vector<double> vals_temp;
 				for (auto& pn : pnames)
 				{
-					vals_temp.push_back(elem[pn]); // get parameter values
+					if (elem.find(pn) != elem.end())
+					{ 
+						vals_temp.push_back(elem[pn]); // get parameter values
+					}
+					else
+					{
+						theErrorFile << "Error reading json: cannot find <" << pn << "> in " << distName << " from input json." << std::endl;
+						theErrorFile.close();
+						exit(-1);
+					}
+
 				}
 				vals.push_back(vals_temp);
 			}
@@ -261,10 +283,10 @@ jsonInput::jsonInput(string workDir)
 					int index_rvn = std::distance(rvNames.begin(), itr); // start from 0
 					aGroup.push_back((int)index_rvn);
 
-					if (index_rvn > nrv) {
+					if (index_rvn >= nrv) {
 						// If it is a constant variable
 						theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable: ";
-						theErrorFile << rvNames[index_rvn - 1] << std::endl;
+						theErrorFile << rvNames[index_rvn] << std::endl;
 						theErrorFile.close();
 						exit(-1);
 					}

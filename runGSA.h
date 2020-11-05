@@ -10,7 +10,9 @@
 #include <vector>
 #include <numeric> // std::iota
 #include <armadillo>
+#include "jsonInput.h"
 extern std::ofstream theErrorFile;
+
 using namespace arma;
 #define ARMA_USE_LAPACK
 #define ARMA_USE_BLAS
@@ -25,9 +27,12 @@ public:
 			vector<vector<int>> combs_tmp,
 			int Kos);
 	~runGSA();
+	double writeOutputs(jsonInput inp);
+
 	//vector<double> Si;
 
 	vector<vector<double>> xval;
+	vector<vector<double>> gval;
 	vector<vector<int>> combs_tmp;
 	char Opt;
 	//int Kos;

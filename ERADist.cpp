@@ -45,7 +45,7 @@ ERADist::ERADist(string getName, string getOpt, vector<double> getVal, vector<do
 	{
 		this->theDist = new chiSquaredDist(getOpt, getVal);
 	}
-	else if (getName.compare("chisquared") == 0)
+	else if (getName.compare("chisquare") == 0)
 	{
 		this->theDist = new chiSquaredDist(getOpt, getVal);
 	}

@@ -56,18 +56,25 @@ betaDist::betaDist(string opt, vector<double> val, vector<double> add) : betDist
 			theErrorFile.close();
 			exit(-1);
 		}
+		else if ((val[0] <= val[2]) || (val[0] >= val[3]))
+		{
+			theErrorFile << "Error running UQ engine: mean of " << name << " distribution must be in a valid range " << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
 		else
 		{
 			double mu = val[0];
 			double sig = val[1];
 			a = val[2];
 			b = val[3];
+
 			alp = ((b - mu) * (mu - a) / (sig*sig) - 1) * (mu - a) / (b - a);
 			bet = alp * (b - mu) / (mu - a);
 		}
-		if ((alp <= 0) || (bet <= 0))
+		if (!((alp > 0) && (bet > 0)))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: parameters of " << name << " distribution must be greater than 0 " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -77,7 +84,7 @@ betaDist::betaDist(string opt, vector<double> val, vector<double> add) : betDist
 
 		if (add.size() == 0)
 		{
-			theErrorFile << "Error running UQ engine: Provide a valid range" << std::endl;
+			theErrorFile << "Error running UQ engine: Provide a valid rangef for " << name << " distribution." << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -85,6 +92,14 @@ betaDist::betaDist(string opt, vector<double> val, vector<double> add) : betDist
 		a = add[0];
 		b = add[1];
 
+		double maxSmp = *std::max_element(std::begin(val), std::end(val));
+		double minSmp = *std::min_element(std::begin(val), std::end(val));
+		if ((maxSmp > b) || (minSmp < a))
+		{
+			theErrorFile << "Error running UQ engine: samples of " << name << " distribution exceeds the range [min,max]" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
 
 		const int np = 2;
 
@@ -138,10 +153,47 @@ betaDist::betaDist(string opt, vector<double> val, vector<double> add) : betDist
 	}
 	boost::math::beta_distribution<> betDist1(alp, bet); // shape k, scale theta=1/lambda (or 1/beta)
 	betDist = betDist1;
-
+	checkParams();
 }
 
+
 betaDist::~betaDist() {}
+
+void betaDist::checkParams()
+{
+	double std = getStd();
+	double mean = getMean();
+	vector<double> par = getParam();
+	
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	
+	if ((mean <= par[2]) || (mean >=par[3]))
+	{
+		theErrorFile << "Error running UQ engine: mean of " << name << " distribution must be in a valid range " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	
+	if (par[2] > par[3])
+	{ 
+		theErrorFile << "Error running UQ engine: range of " << name << "distribution is not valid " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if (!(par[0]>0 && (par[1]>0)))
+	{
+		theErrorFile << "Error running UQ engine: parameters of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
+
 
 //==
 

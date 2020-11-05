@@ -10,6 +10,7 @@ runGSA::runGSA(vector<vector<double>> xval,
 	int Kos)
 {
 	this->xval = xval;
+	this->gval = gmat;
 	this->combs_tmp = combs_tmp;
 	nmc = xval.size();
 
@@ -47,7 +48,9 @@ runGSA::runGSA(vector<vector<double>> xval,
 		};
 
 		vector<double> Sij, Stj;
-		
+
+
+		// repeat GSA with different Kos untill success
 		double failIdx = -100, i = 1;
 		while ((failIdx == -100) || (Kos/i < 0.5))
 		{
@@ -260,4 +263,102 @@ double runGSA::calVar(vector<double> x) {
 		});
 	//std::cout << (accum / (x.size())) << std::endl;
 	return (accum / (x.size()));
+}
+
+
+
+double runGSA::writeOutputs(jsonInput inp)
+{
+	// dakota.out
+	string writingloc = inp.workDir + "/dakota.out";
+	std::ofstream outfile(writingloc);
+
+	if (!outfile.is_open()) {
+		theErrorFile << "Error running UQ engine: Unable to write dakota.out";
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	outfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format
+	outfile.precision(4); // for fixed format
+
+	outfile << "* number of input combinations" << std::endl;
+	outfile << inp.ngr << std::endl;
+
+	outfile << "* input names" << std::endl;
+	for (int i = 0; i < inp.ngr; i++) {
+		for (int j = 0; j < inp.groups[i].size() - 1; j++) {
+			outfile << inp.rvNames[inp.groups[i][j]] << ",";
+		}
+		outfile << inp.rvNames[inp.groups[i][inp.groups[i].size() - 1]] << std::endl;
+	}
+
+	outfile << "* number of outputs" << std::endl;
+	outfile << inp.nqoi << std::endl;
+
+	outfile << "* output names" << std::endl;
+	for (int i = 0; i < inp.nqoi; i++) {
+		outfile << inp.qoiNames[i] << std::endl;
+	}
+
+	outfile << "* ";
+	for (int j = 0; j < inp.ngr; j++) {
+		outfile << "Sm(" << std::to_string(j + 1) << ")  ";
+	}
+	for (int j = 0; j < inp.ngr; j++) {
+		outfile << "St(" << std::to_string(j + 1) << ")  ";
+	}
+	outfile << std::endl;
+
+	for (int i = 0; i < inp.nqoi; i++) {
+
+		for (int j = 0; j < inp.ngr; j++) {
+			outfile << Simat[i][j] << " ";
+		}
+		for (int j = 0; j < inp.ngr; j++) {
+			outfile << Stmat[i][j] << " ";
+		}
+		outfile << std::endl;
+	}
+
+	outfile << "* number of samples" << std::endl;
+	outfile << inp.nmc << std::endl;
+	outfile.close();
+
+	// dakotaTab.out
+	std::string writingloc1 = inp.workDir + "/dakotaTab.out";
+	std::ofstream Taboutfile(writingloc1);
+
+	if (!Taboutfile.is_open()) {
+		theErrorFile << "Error running UQ engine: Unable to write dakotaTab.out";
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	Taboutfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format
+	Taboutfile.precision(10); // for fixed format
+
+	Taboutfile << "idx         ";
+	for (int j = 0; j < inp.nrv + inp.nco; j++) {
+		Taboutfile << inp.rvNames[j] << "           ";
+	}
+	for (int j = 0; j < inp.nqoi; j++) {
+		Taboutfile << inp.qoiNames[j] << "            ";
+	}
+	Taboutfile << std::endl;
+
+
+	for (int i = 0; i < inp.nmc; i++) {
+		Taboutfile << std::to_string(i + 1) << "    ";
+		for (int j = 0; j < inp.nrv + inp.nco; j++) {
+			Taboutfile << std::to_string(xval[i][j]) << "    ";
+		}
+		for (int j = 0; j < inp.nqoi; j++) {
+			Taboutfile << std::to_string(gval[i][j]) << "    ";
+		}
+		Taboutfile << std::endl;
+	}
+
+	theErrorFile.close();
+
 }

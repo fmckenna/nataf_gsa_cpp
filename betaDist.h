@@ -30,5 +30,6 @@ public:
 
 private:
 	double a,b,alp,bet;
+	void checkParams();
 
 };

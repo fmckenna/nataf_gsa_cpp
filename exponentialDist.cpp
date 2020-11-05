@@ -19,13 +19,13 @@ exponentialDist::exponentialDist(string opt, vector<double> val, vector<double> 
 	{
 		if (val.size() != 1)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
 		else if (val[0] <= 0)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: parameter of " << name << " distribution must be greater than 0" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -39,13 +39,13 @@ exponentialDist::exponentialDist(string opt, vector<double> val, vector<double> 
 
 		if (val.size() != 1)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
 		else if (val[0] <= 0)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: mean of " << name << " distribution must be greater than 0" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -57,6 +57,14 @@ exponentialDist::exponentialDist(string opt, vector<double> val, vector<double> 
 	}
 	else if (opt.compare("DAT") == 0)
 	{
+		double minSmp = *std::min_element(std::begin(val), std::end(val));
+		if (minSmp < 0)
+		{
+			theErrorFile << "Error running UQ engine: samples of " << name << " distribution exceeds the range [0,inf]" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+
 		const int np = 1;
 		//double lb[np] = { -HUGE_VAL, 0 };
 		//const double  *lb = { 0 };
@@ -100,11 +108,37 @@ exponentialDist::exponentialDist(string opt, vector<double> val, vector<double> 
 
 	exponential expDist1(lambda);
 	expDist = expDist1;
-
+	checkParams();
 }
 
 exponentialDist::~exponentialDist() {}
 //==
+
+
+void exponentialDist::checkParams()
+{
+	double std = getStd();
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " should be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	double mean = getMean();
+	if (mean <= 0)
+	{
+		theErrorFile << "Error running UQ engine: mean of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	vector<double> par = getParam();
+	if (par[0] <= 0)
+	{
+		theErrorFile << "Error running UQ engine: parameter of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
 
 
 double exponentialDist::getPdf(double x)

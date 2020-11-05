@@ -90,6 +90,7 @@ discreteDist::discreteDist(string opt, vector<double> val, vector<double> add )
 			  [&](int i1, int i2) { return value[i1] < value[i2]; });
 
 	sortIdx = y;
+
 }
 
 discreteDist::~discreteDist() {}

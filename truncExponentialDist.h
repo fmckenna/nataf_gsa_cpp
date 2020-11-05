@@ -27,5 +27,6 @@ public:
 private:
 	double lambda,a,b;
 	double normConst;
+	void checkParams();
 	
 };

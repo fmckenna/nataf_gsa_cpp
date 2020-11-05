@@ -25,9 +25,9 @@ chiSquaredDist::chiSquaredDist(string opt, vector<double> val, vector<double> ad
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) && (val[0]-floor(val[0])>1.e-10)) // not integer
+		else if ((val[0] <= 0) || (val[0]-floor(val[0])>1.e-10)) // not integer
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: parameter of " << name << " distribution must a positive integer " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -45,9 +45,9 @@ chiSquaredDist::chiSquaredDist(string opt, vector<double> val, vector<double> ad
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) && (val[0] - floor(val[0]) > 1.e-10)) // not integer
+		else if ((val[0] <= 0) || (val[0] - floor(val[0]) > 1.e-10)) // not integer
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: mean of " << name << " distribution must a positive integer " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -59,6 +59,10 @@ chiSquaredDist::chiSquaredDist(string opt, vector<double> val, vector<double> ad
 	}
 	else if (opt.compare("DAT") == 0)
 	{
+		theErrorFile << "The Chisquare distribution is not supported in DATA input type" << std::endl;
+		theErrorFile.close();
+		exit(-1);
+		/*
 		const int np = 1;
 		//double lb[np] = { -HUGE_VAL, 0 };
 		//const double  *lb = { 0 };
@@ -94,16 +98,45 @@ chiSquaredDist::chiSquaredDist(string opt, vector<double> val, vector<double> ad
 			//lambda = x[0];
 			printf("found minimum at f(%g) = %0.10g\n", k, minf);
 		}
-
+		*/
 	}
 
 	chi_squared chiSqDist1(k);
 	chiSqDist = chiSqDist1;
+	checkParams();
 
 }
 
 chiSquaredDist::~chiSquaredDist() {}
 //==
+
+void chiSquaredDist::checkParams()
+{
+	double std = getStd();
+	double mean = getMean();
+	vector<double> par = getParam();
+
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if ((mean <= 0) || (mean - floor(mean) > 1.e-10)) // not integer
+	{
+		theErrorFile << "Error running UQ engine: mean of " << name << " must a positive integer " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if ((par[0] <= 0) || (par[0] - floor(par[0]) > 1.e-10)) // not integer
+	{
+		theErrorFile << "Error running UQ engine: parameter of " << name << " must a positive integer " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
 
 
 double chiSquaredDist::getPdf(double x)

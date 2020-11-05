@@ -4,7 +4,7 @@
 #include "normalDist.h"
 #include "gammaDist.h"
 #include "betaDist.h"
-#include "lognormalDIst.h"
+#include "lognormalDist.h"
 #include "uniformDist.h"
 #include "chiSquaredDist.h"
 #include "gumbelDist.h"

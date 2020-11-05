@@ -27,5 +27,6 @@ public:
 
 private:
 	double lambda, zeta;
+	void checkParams();
 
 };

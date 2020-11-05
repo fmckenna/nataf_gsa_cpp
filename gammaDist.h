@@ -29,5 +29,5 @@ public:
 
 private:
 	double k,lambda;
-
+	void checkParams();
 };

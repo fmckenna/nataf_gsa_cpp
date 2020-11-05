@@ -24,20 +24,20 @@ uniformDist::uniformDist(string opt, vector<double> val, vector<double> add)
 
 		if (val.size()!= npa)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[1] <= 0))
+		else if ((val[0] >= val[1]))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: range of " << name << " distribution is not valid " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
 		else
 		{
-			a = val[0]; // log mean
-			b = val[1]; // log std
+			a = val[0]; 
+			b = val[1]; 
 		}
 
 	}
@@ -50,9 +50,9 @@ uniformDist::uniformDist(string opt, vector<double> val, vector<double> add)
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) || (val[1] <= 0))
+		else if ((val[1] <= 0))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: standard deviation of " << name << " distribution must be greater than 0" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
