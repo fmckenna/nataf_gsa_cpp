@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lib_json/json.hpp"
+#include <nlohmann/json.hpp>
 #include <fstream>
 #include <sstream>
 #include <string>
