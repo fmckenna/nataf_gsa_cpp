@@ -29,7 +29,8 @@ public:
 	void simulateAppBatch(string osType, 
 						 string runType, 
 						 jsonInput inp, 
-					 	 vector<vector<double>> u, 
+					 	 vector<vector<double>> u,
+						 vector<vector<int>> idx,
 						 vector<vector<double>> &xvals, 
 						 vector<vector<double>> &gvals);
 	void simulateAppSequential(string osType,

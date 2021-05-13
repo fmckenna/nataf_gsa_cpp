@@ -26,6 +26,7 @@ public:
 	int nrv;
 	int nco;
 	int nre;
+	int nreg;
 	int nqoi;
 	int rseed;
 	int ngr;
@@ -41,10 +42,12 @@ public:
 	vector<vector<double>> adds;
 	vector<vector<int>> groups;
 	vector<vector<int>> resamplingGroups;
+	vector<int> resamplingSize;
 
 private:
 	void getPnames(string distname, string optname, vector<std::string>& par_char);
-	void fromTextToVects(string groupTxt, vector<string> groupDomain, vector<vector<int>>& groupVect, vector<int>& flattenVect);
+	void fromTextToStr(string groupTxt, vector<vector<string>>& groupStringVector, vector<string>& flattenStringVect);
+	void fromTextToId(string groupTxt, vector<string>& groupPool, vector<vector<int>>& groupIdVect);
 
 };
 

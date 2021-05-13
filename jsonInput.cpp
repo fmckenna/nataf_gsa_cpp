@@ -41,9 +41,12 @@ jsonInput::jsonInput(string workDir)
 	nre = 0;
 
 	std::string resampGroupTxt = UQjson["UQ_Method"]["RVdataGroup"];
-	vector<int> flattenResamplingGroups;
-	fromTextToVects(resampGroupTxt,resamplingGroups, flattenResamplingGroups);
-	
+	vector<vector<string>> resamplingGroupsString;
+	vector<string> flattenResamplingGroups;
+
+	fromTextToStr(resampGroupTxt, resamplingGroupsString, flattenResamplingGroups);
+	nreg = resamplingGroupsString.size();
+
 	auto it = std::unique(flattenResamplingGroups.begin(), flattenResamplingGroups.end());
 	bool isUnique = (it == flattenResamplingGroups.end());
 	if (!isUnique) {
@@ -115,13 +118,11 @@ jsonInput::jsonInput(string workDir)
 				exit(-1);
 			}
 
-			if (elem[pnames[0]].size() == 1) {
 				// discrete distribution with only one quantity = constant
-				resampIdx.push_back(count);
-				nre++;
-				count++;
-				continue;
-			}
+			resampIdx.push_back(count);
+			nre++;
+			count++;
+			continue;
 		}
 		// save name of random variable etc
 		rvNames.push_back(elem["name"]);
@@ -150,6 +151,7 @@ jsonInput::jsonInput(string workDir)
 					data_table.ignore();
 			}
 			data_table.close();
+			resampleCandidates.push_back(vals_tmp);
 			vals.push_back(vals_tmp);
 
 			if (vals_tmp.size() < 1) { //*ERROR*
@@ -215,6 +217,49 @@ jsonInput::jsonInput(string workDir)
 	}
 
 	//
+	// get resamples
+	//
+
+
+	for (int i : resampIdx)
+	{
+
+		auto elem = UQjson["randomVariables"][i];
+
+		// Sample set inside vals
+		std::string directory = elem["dataDir"];
+		std::ifstream data_table(directory);
+		if (!data_table.is_open()) {
+			//*ERROR*
+			theErrorFile << "Error reading json: cannot open data file at " << directory << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+
+		std::vector<double> vals_tmp;
+		double samps = 0.0;
+		while (data_table >> samps)
+		{
+			vals_tmp.push_back(samps);
+			if (data_table.peek() == ',')
+				data_table.ignore();
+		}
+		data_table.close();
+
+		if (vals_tmp.size() < 1) { //*ERROR*
+			int a = vals_tmp.size();
+			std::cout << a << std::endl;
+			theErrorFile << "Error reading json: data file of " << rvNames[nrv] << " has less then one sample." << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+
+		vals.push_back(vals_tmp);
+		resampleCandidates.push_back(vals_tmp);
+		rvNames.push_back(elem["name"]);
+	}
+
+	//
 	// get constants
 	//
 	
@@ -252,41 +297,7 @@ jsonInput::jsonInput(string workDir)
 			}
 		}
 	}
-	for (int i : resampIdx)
-	{
-		auto elem = UQjson["randomVariables"][i];
 
-		// Sample set inside vals
-		std::string directory = elem["dataDir"];
-		std::ifstream data_table(directory);
-		if (!data_table.is_open()) {
-			//*ERROR*a
-			theErrorFile << "Error reading json: cannot open data file at " << directory << std::endl;
-			theErrorFile.close();
-			exit(-1);
-		}
-
-		std::vector<double> vals_tmp;
-		double samps = 0.0;
-		while (data_table >> samps)
-		{
-			vals_tmp.push_back(samps);
-			if (data_table.peek() == ',')
-				data_table.ignore();
-		}
-		data_table.close();
-		resampleCandidates.push_back(vals_tmp);
-
-		if (vals_tmp.size() < 1) { //*ERROR*
-			int a = vals_tmp.size();
-			std::cout << a << std::endl;
-			theErrorFile << "Error reading json: data file of " << elem["name"] << " has less then one sample." << std::endl;
-			theErrorFile.close();
-			exit(-1);
-		}
-
-		rvNames.push_back(elem["name"]);
-	}
 
 
 	//
@@ -343,8 +354,7 @@ jsonInput::jsonInput(string workDir)
 		// if the key "sensitivityGroups" exists
 
 		std::string groupTxt = UQjson["UQ_Method"]["sensitivityGroups"];
-		vector<int> flattenGroups;
-		fromTextToVects(groupTxt, groups, flattenGroups);
+		fromTextToId(groupTxt, rvNames, groups);
 	}
 	else {
 		for (int i = 0; i < nrv; i++) {
@@ -353,30 +363,66 @@ jsonInput::jsonInput(string workDir)
 	}
 	ngr = groups.size();
 
+
+
+	//
+	// get resampling group index matrix
+	//
+
+	fromTextToId(resampGroupTxt, rvNames, resamplingGroups);
+
+	for (int i = 0; i < nreg; i++) {
+		int length_old = size(vals[resamplingGroups[i][0]]);
+		int length_data;
+		for (int j = 1; j < size(resamplingGroups[i]); j++) {
+			std::cout << resamplingGroups[i][j] << std::endl;
+			std::cout << size(vals) << std::endl;
+			std::cout << (rvNames[0]) << std::endl;
+			std::cout << rvNames[1] << std::endl;
+			std::cout << rvNames[2] << std::endl;
+			std::cout << rvNames[3] << std::endl;
+
+			std::cout << vals[resamplingGroups[i][j]][0] << std::endl;
+
+			length_data = size(vals[resamplingGroups[i][j]]);
+			if (length_data != length_old)
+			{
+				theErrorFile << "Error reading json: RVs in the same group do not have the same number of samples" << std::endl;
+				theErrorFile.close();
+				exit(-1);
+			}
+			length_old = length_data;
+			std::cout<< size(vals[resamplingGroups[i][j]]) <<std::endl;
+		}
+		resamplingSize.push_back(length_data);
+	}
+
 }
 
-
 void
-jsonInput::fromTextToVects(string groupTxt,  vector<vector<int>>& groupVect, vector<int>& flattenVect)
+jsonInput::fromTextToId(string groupTxt, vector<string>& groupPool, vector<vector<int>>& groupIdVect)
 {
+	int nrv = size(groupPool);
 	std::regex re(R"(\{([^}]+)\})"); // will get string inside {}
 	std::sregex_token_iterator it(groupTxt.begin(), groupTxt.end(), re, 1);
 	std::sregex_token_iterator end;
 	while (it != end) {
 		std::stringstream ss(*it++);
-		std::vector<int> aGroup;
+		std::vector<int> groupID;
+		std::vector<string> groupString;
 		while (ss.good()) {
 			std::string substr;
 			getline(ss, substr, ',');  // incase we have multiple strings inside {}
-			std::vector<std::string>::iterator itr = std::find(groupDomain.begin(), groupDomain.end(), substr);
-			if (itr != groupDomain.cend()) { // from names (a,b,{a,b}) to idx's (1,2,{1,2})		
-				int index_rvn = std::distance(groupDomain.begin(), itr); // start from 0
-				aGroup.push_back((int)index_rvn);
-				flattenVect.push_back((int)index_rvn);
+			groupString.push_back(substr);
+
+			std::vector<std::string>::iterator itr = std::find(groupPool.begin(), groupPool.end(), substr);
+			if (itr != groupPool.cend()) { // from names (a,b,{a,b}) to idx's (1,2,{1,2})		
+				int index_rvn = std::distance(groupPool.begin(), itr); // start from 0
+				groupID.push_back((int)index_rvn);
 				if (index_rvn >= nrv) {
 					// If it is a constant variable
 					theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable: ";
-					theErrorFile << groupDomain[index_rvn] << std::endl;
+					theErrorFile << groupPool[index_rvn] << std::endl;
 					theErrorFile.close();
 					exit(-1);
 				}
@@ -388,9 +434,27 @@ jsonInput::fromTextToVects(string groupTxt,  vector<vector<int>>& groupVect, vec
 				exit(-1);
 			}
 		}
-		groups.push_back(aGroup);
+		groupIdVect.push_back(groupID);
 	}
+}
 
+void
+jsonInput::fromTextToStr(string groupTxt, vector<vector<string>>& groupStringVector, vector<string>& flattenStringVect)
+{
+	std::regex re(R"(\{([^}]+)\})"); // will get string inside {}
+	std::sregex_token_iterator it(groupTxt.begin(), groupTxt.end(), re, 1);
+	std::sregex_token_iterator end;
+	while (it != end) {
+		std::stringstream ss(*it++);
+		std::vector<string> groupString;
+		while (ss.good()) {
+			std::string substr;
+			getline(ss, substr, ',');  // incase we have multiple strings inside {}
+			groupString.push_back(substr);
+			flattenStringVect.push_back(substr);
+		}
+		groupStringVector.push_back(groupString);
+	}
 }
 
 void 
@@ -569,4 +633,5 @@ jsonInput::getPnames(string distname, string optname, vector<std::string>& par_c
 		exit(-1);
 	}
 }
+
 jsonInput::~jsonInput(void) {}

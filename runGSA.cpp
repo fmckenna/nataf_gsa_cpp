@@ -339,7 +339,7 @@ double runGSA::writeOutputs(jsonInput inp)
 	Taboutfile.precision(10); // for fixed format
 
 	Taboutfile << "idx         ";
-	for (int j = 0; j < inp.nrv + inp.nco; j++) {
+	for (int j = 0; j < inp.nrv + inp.nco + inp.nre; j++) {
 		Taboutfile << inp.rvNames[j] << "           ";
 	}
 	for (int j = 0; j < inp.nqoi; j++) {
@@ -350,7 +350,7 @@ double runGSA::writeOutputs(jsonInput inp)
 
 	for (int i = 0; i < inp.nmc; i++) {
 		Taboutfile << std::to_string(i + 1) << "    ";
-		for (int j = 0; j < inp.nrv + inp.nco; j++) {
+		for (int j = 0; j < inp.nrv + inp.nco + inp.nre; j++) {
 			Taboutfile << std::to_string(xval[i][j]) << "    ";
 		}
 		for (int j = 0; j < inp.nqoi; j++) {

@@ -47,6 +47,8 @@ int main(int argc, char** argv)
 	//
 	
 	int nmc = inp.nmc;
+	int nreg = inp.nreg;
+
 	std::mt19937 generator(inp.rseed);
 	std::normal_distribution<double> distribution(0.0, 1.0);
 
@@ -56,13 +58,28 @@ int main(int argc, char** argv)
 		for (int nr = 0; nr < inp.nrv; nr++)
 			uvals[ns][nr] = distribution(generator);
 	}
+
+	std::cout<<std::to_string(inp.nreg)<<std::endl;
+	std::cout<<std::to_string(nreg);
+
+	vector<vector<int>> resampIDs(nmc, vector<int>(nreg, 0.0));
+	for (int nr = 0; nr < nreg; nr++)
+	{
+		std::uniform_int_distribution<int> discrete_dist(0, inp.resamplingSize[nr]-1);
+		for (int ns = 0; ns < nmc; ns++)
+		{
+			resampIDs[ns][nr] = discrete_dist(generator);
+			std::cout << resampIDs[ns][nr] << std::endl;
+		}
+	}
+
 	
 	//
 	//	(4-1) FE Analysis - (batch samples)
 	//
 	
 	vector<vector<double>> gvals, xvals;
-	T.simulateAppBatch(osType, runType, inp, uvals, xvals, gvals);
+	T.simulateAppBatch(osType, runType, inp, uvals, resampIDs, xvals, gvals);
 
 
 	//

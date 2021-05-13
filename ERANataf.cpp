@@ -446,19 +446,30 @@ double ERANataf::normCdf(double x)
 	return 0.5 * (1.0 + sign * y);
 }
 
-void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<double>> &x, vector<vector<double>> &gval)
+void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<int>> resampIDs, vector<vector<double>> &x, vector<vector<double>> &gval)
 {
 	//
 	// Change from u to x;
 	//
 
 	x = U2X(inp.nmc, u);
-
-
-	for (int i = 0; i < inp.nmc; i++)
+	std::vector<double> zero_vector(inp.nre, 0);
+	for (int ns = 0; ns < inp.nmc; ns++)
 	{
+		// for resampling
+		x[ns].insert(x[ns].end(), zero_vector.begin(), zero_vector.end());
+		for (int ng = 0; ng < inp.nreg; ng++)
+		{
+			for (int nr : inp.resamplingGroups[ng])
+				x[ns][nr] = inp.vals[nr][resampIDs[ns][ng]];
+		}
+
+		// for constants
 		for (int j = 0; j < inp.nco; j++)
-			x[i].push_back(inp.constants[j]);
+			x[ns].push_back(inp.constants[j]);
+
+		std::cerr << x[ns][0] <<"  "  << x[ns][1] << "  " << x[ns][2] << "  " << x[ns][3] << "\n";
+
 	}
 
 	//
@@ -518,8 +529,8 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 		string params = workDir + "/params.in";
 		std::ofstream writeFile(params.data());
 		if (writeFile.is_open()) {
-			writeFile << std::to_string(inp.nrv+ inp.nco) + "\n";
-			for (int j = 0; j < inp.nrv+inp.nco; j++) {
+			writeFile << std::to_string(inp.nrv+ inp.nco + inp.nre) + "\n";
+			for (int j = 0; j < inp.nrv+inp.nco + inp.nre; j++) {
 				writeFile << inp.rvNames[j] + " ";
 				writeFile << std::to_string(x[i][j]) + "\n";
 			}
