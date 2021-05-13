@@ -42,7 +42,7 @@ jsonInput::jsonInput(string workDir)
 
 	std::string resampGroupTxt = UQjson["UQ_Method"]["RVdataGroup"];
 	vector<int> flattenResamplingGroups;
-	fromTextToVects(resampGroupTxt,resamplingGroups, flattenResamplingGroups);
+	fromTextToVects(resampGroupTxt, rvNames, resamplingGroups, flattenResamplingGroups);
 	
 	auto it = std::unique(flattenResamplingGroups.begin(), flattenResamplingGroups.end());
 	bool isUnique = (it == flattenResamplingGroups.end());
@@ -344,7 +344,7 @@ jsonInput::jsonInput(string workDir)
 
 		std::string groupTxt = UQjson["UQ_Method"]["sensitivityGroups"];
 		vector<int> flattenGroups;
-		fromTextToVects(groupTxt, groups, flattenGroups);
+		fromTextToVects(groupTxt, rvNames, groups, flattenGroups);
 	}
 	else {
 		for (int i = 0; i < nrv; i++) {
@@ -357,7 +357,7 @@ jsonInput::jsonInput(string workDir)
 
 
 void
-jsonInput::fromTextToVects(string groupTxt,  vector<vector<int>>& groupVect, vector<int>& flattenVect)
+jsonInput::fromTextToVects(string groupTxt, vector<string> groupDomain, vector<vector<int>>& groupVect, vector<int>& flattenVect)
 {
 	std::regex re(R"(\{([^}]+)\})"); // will get string inside {}
 	std::sregex_token_iterator it(groupTxt.begin(), groupTxt.end(), re, 1);

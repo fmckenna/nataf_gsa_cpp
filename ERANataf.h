@@ -54,7 +54,7 @@ private:
 };
 
 // For MLE optimization
-typedef struct {
+typedef struct NatafStr {
 	vector<double> points = {};
 	vector<double> fxii = {};
 	vector<double> fxij = {};

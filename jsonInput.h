@@ -25,12 +25,14 @@ public:
 	int nmc;
 	int nrv;
 	int nco;
+	int nre;
 	int nqoi;
 	int rseed;
 	int ngr;
 	string UQmethod;
 	vector<string> distNames;
 	vector<vector<double>> vals;
+	vector<vector<double>> resampleCandidates;
 	vector<double> constants;
 	vector<string> opts;
 	vector<string> rvNames;
@@ -38,9 +40,11 @@ public:
 	vector<vector<double>> corr;
 	vector<vector<double>> adds;
 	vector<vector<int>> groups;
+	vector<vector<int>> resamplingGroups;
 
 private:
 	void getPnames(string distname, string optname, vector<std::string>& par_char);
+	void fromTextToVects(string groupTxt, vector<string> groupDomain, vector<vector<int>>& groupVect, vector<int>& flattenVect);
 
 };
 
