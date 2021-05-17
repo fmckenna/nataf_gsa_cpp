@@ -28,7 +28,7 @@ jsonInput::jsonInput(string workDir)
 	nmc = UQjson["UQ_Method"]["samplingMethodData"]["samples"];
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQmethod = UQjson["UQ_Method"]["samplingMethodData"]["method"];
-
+	uqType = UQjson["UQ_Method"]["uqType"];
 	//
 	// Specify parameters in each distributions.
 	//
@@ -40,7 +40,13 @@ jsonInput::jsonInput(string workDir)
 	nco = 0;
 	nre = 0;
 
-	std::string resampGroupTxt = UQjson["UQ_Method"]["RVdataGroup"];
+	std::string resampGroupTxt;
+	if (UQjson["UQ_Method"].find("RVdataGroup") != UQjson["UQ_Method"].end()) {
+		// if the key "sensitivityGroups" exists
+		resampGroupTxt = UQjson["UQ_Method"]["RVdataGroup"];
+	} else {
+		resampGroupTxt = "";
+	}
 	vector<vector<string>> resamplingGroupsString;
 	vector<string> flattenResamplingGroups;
 
@@ -104,16 +110,16 @@ jsonInput::jsonInput(string workDir)
 			if (!(distName.compare("discrete") == 0) || !(inpTypeSub.compare("DAT")) == 0) {
 				//*ERROR*
 				string InputType;
-				if (inpTypeSub.compare("DAT")) {
+				if (!inpTypeSub.compare("DAT")) {
 					InputType = "Dataset";
 				}
-				else if (inpTypeSub.compare("PAR")) {
+				else if (!inpTypeSub.compare("PAR")) {
 					InputType = "Parameters";
 				}
 				else {
 					InputType = "Moments";
 				}
-				theErrorFile << "Error reading input: RVs specified in UQ tab should have the option <Dataset-Discrete>. Your input have <" << InputType << "-" << distName << ">" << std::endl;
+				theErrorFile << "Error reading input: RVs specified in UQ tab should have the option <Dataset-Discrete>. Your input is <" << InputType << "-" << distName << ">" << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}

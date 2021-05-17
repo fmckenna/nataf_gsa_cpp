@@ -7,6 +7,7 @@
 #include "ERADist.h"
 #include "ERANataf.h"
 #include "runGSA.h"
+#include "runForward.h"
 
 
 std::ofstream theErrorFile; // Error log
@@ -101,18 +102,31 @@ int main(int argc, char** argv)
 		//std::cout<< gvals[ns][0] << " " << gvals[ns][1] << std::endl;
 	}	
 */
-	//
-	//	(5) Global sensitivity analysis
-	//
 
-	int Kos = 25;
-	runGSA GsaResults(xvals, gvals, inp.groups, Kos); 
 
-	//
-	//	Write files/dakota.out, dakotaTab.out
-	//
+	if (!inp.uqType.compare("Sensitivity Analysis")) {
+		//
+		//	(5) Global sensitivity analysis
+		//
+		int Kos = 25;
+		runGSA GsaResults(xvals, gvals, inp.groups, Kos);
+		//
+		//	Write files/dakota.out, dakotaTab.out
+		//
 
-	GsaResults.writeOutputs(inp);
+		GsaResults.writeOutputs(inp);
+	}
+	else if (!inp.uqType.compare("Forward Propagation")) {
+		//
+		//	(5) Forward analysis
+		//
+		runForward ForwardResults(xvals, gvals);
+		//
+		//	Write files/dakota.out, dakotaTab.out
+		//
+		ForwardResults.writeOutputs(inp);
+	}
+
 	
 	return 0;
 

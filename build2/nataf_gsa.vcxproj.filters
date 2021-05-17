@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\ERADist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\exponentialDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\normalDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\ERANataf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\gammaDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\runGSA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\runForward.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\RVDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\gumbelDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\truncExponentialDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\betaDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\jsonInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\uniformDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\chiSquaredDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lognormalDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\weibullDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\discreteDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{255A73E2-CF07-3BC4-9A5A-FB38D904E206}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

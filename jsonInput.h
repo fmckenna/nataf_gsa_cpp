@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lib_json/json.hpp"
+#include <nlohmann/json.hpp>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -22,6 +22,8 @@ public:
 	virtual ~jsonInput(void);
 
 	string workDir;
+	string uqType;
+
 	int nmc;
 	int nrv;
 	int nco;

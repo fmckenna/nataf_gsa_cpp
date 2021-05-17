@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1A3EFE1E-65C9-3F34-B871-9D768B6BEABF}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>nataf_gsa</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nataf_gsa.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nataf_gsa</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nataf_gsa.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nataf_gsa</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">nataf_gsa.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">nataf_gsa</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">nataf_gsa.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">nataf_gsa</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\.conan\f7e8fe\1\lib\libboost_contract.lib;C:\.conan\f7e8fe\1\lib\libboost_coroutine.lib;C:\.conan\f7e8fe\1\lib\libboost_fiber.lib;C:\.conan\f7e8fe\1\lib\libboost_context.lib;C:\.conan\f7e8fe\1\lib\libboost_graph.lib;C:\.conan\f7e8fe\1\lib\libboost_iostreams.lib;C:\.conan\f7e8fe\1\lib\libboost_log_setup.lib;C:\.conan\f7e8fe\1\lib\libboost_log.lib;C:\.conan\f7e8fe\1\lib\libboost_locale.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99l.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1l.lib;C:\.conan\f7e8fe\1\lib\libboost_nowide.lib;C:\.conan\f7e8fe\1\lib\libboost_program_options.lib;C:\.conan\f7e8fe\1\lib\libboost_random.lib;C:\.conan\f7e8fe\1\lib\libboost_regex.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_noop.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg_cached.lib;C:\.conan\f7e8fe\1\lib\libboost_timer.lib;C:\.conan\f7e8fe\1\lib\libboost_type_erasure.lib;C:\.conan\f7e8fe\1\lib\libboost_thread.lib;C:\.conan\f7e8fe\1\lib\libboost_atomic.lib;C:\.conan\f7e8fe\1\lib\libboost_chrono.lib;C:\.conan\f7e8fe\1\lib\libboost_container.lib;C:\.conan\f7e8fe\1\lib\libboost_date_time.lib;C:\.conan\f7e8fe\1\lib\libboost_unit_test_framework.lib;C:\.conan\f7e8fe\1\lib\libboost_prg_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_test_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_exception.lib;C:\.conan\f7e8fe\1\lib\libboost_wave.lib;C:\.conan\f7e8fe\1\lib\libboost_filesystem.lib;C:\.conan\f7e8fe\1\lib\libboost_system.lib;C:\.conan\f7e8fe\1\lib\libboost_wserialization.lib;C:\.conan\f7e8fe\1\lib\libboost_serialization.lib;bcrypt.lib;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\zlib.lib;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\lib\bz2.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\iconv.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\charset.lib;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\lib\nlopt.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_intel_lp64.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_sequential.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/lib/nataf_gsa.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/bin/nataf_gsa.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\.conan\f7e8fe\1\lib\libboost_contract.lib;C:\.conan\f7e8fe\1\lib\libboost_coroutine.lib;C:\.conan\f7e8fe\1\lib\libboost_fiber.lib;C:\.conan\f7e8fe\1\lib\libboost_context.lib;C:\.conan\f7e8fe\1\lib\libboost_graph.lib;C:\.conan\f7e8fe\1\lib\libboost_iostreams.lib;C:\.conan\f7e8fe\1\lib\libboost_log_setup.lib;C:\.conan\f7e8fe\1\lib\libboost_log.lib;C:\.conan\f7e8fe\1\lib\libboost_locale.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99l.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1l.lib;C:\.conan\f7e8fe\1\lib\libboost_nowide.lib;C:\.conan\f7e8fe\1\lib\libboost_program_options.lib;C:\.conan\f7e8fe\1\lib\libboost_random.lib;C:\.conan\f7e8fe\1\lib\libboost_regex.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_noop.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg_cached.lib;C:\.conan\f7e8fe\1\lib\libboost_timer.lib;C:\.conan\f7e8fe\1\lib\libboost_type_erasure.lib;C:\.conan\f7e8fe\1\lib\libboost_thread.lib;C:\.conan\f7e8fe\1\lib\libboost_atomic.lib;C:\.conan\f7e8fe\1\lib\libboost_chrono.lib;C:\.conan\f7e8fe\1\lib\libboost_container.lib;C:\.conan\f7e8fe\1\lib\libboost_date_time.lib;C:\.conan\f7e8fe\1\lib\libboost_unit_test_framework.lib;C:\.conan\f7e8fe\1\lib\libboost_prg_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_test_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_exception.lib;C:\.conan\f7e8fe\1\lib\libboost_wave.lib;C:\.conan\f7e8fe\1\lib\libboost_filesystem.lib;C:\.conan\f7e8fe\1\lib\libboost_system.lib;C:\.conan\f7e8fe\1\lib\libboost_wserialization.lib;C:\.conan\f7e8fe\1\lib\libboost_serialization.lib;bcrypt.lib;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\zlib.lib;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\lib\bz2.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\iconv.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\charset.lib;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\lib\nlopt.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_intel_lp64.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_sequential.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/lib/nataf_gsa.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/bin/nataf_gsa.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\.conan\f7e8fe\1\lib\libboost_contract.lib;C:\.conan\f7e8fe\1\lib\libboost_coroutine.lib;C:\.conan\f7e8fe\1\lib\libboost_fiber.lib;C:\.conan\f7e8fe\1\lib\libboost_context.lib;C:\.conan\f7e8fe\1\lib\libboost_graph.lib;C:\.conan\f7e8fe\1\lib\libboost_iostreams.lib;C:\.conan\f7e8fe\1\lib\libboost_log_setup.lib;C:\.conan\f7e8fe\1\lib\libboost_log.lib;C:\.conan\f7e8fe\1\lib\libboost_locale.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99l.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1l.lib;C:\.conan\f7e8fe\1\lib\libboost_nowide.lib;C:\.conan\f7e8fe\1\lib\libboost_program_options.lib;C:\.conan\f7e8fe\1\lib\libboost_random.lib;C:\.conan\f7e8fe\1\lib\libboost_regex.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_noop.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg_cached.lib;C:\.conan\f7e8fe\1\lib\libboost_timer.lib;C:\.conan\f7e8fe\1\lib\libboost_type_erasure.lib;C:\.conan\f7e8fe\1\lib\libboost_thread.lib;C:\.conan\f7e8fe\1\lib\libboost_atomic.lib;C:\.conan\f7e8fe\1\lib\libboost_chrono.lib;C:\.conan\f7e8fe\1\lib\libboost_container.lib;C:\.conan\f7e8fe\1\lib\libboost_date_time.lib;C:\.conan\f7e8fe\1\lib\libboost_unit_test_framework.lib;C:\.conan\f7e8fe\1\lib\libboost_prg_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_test_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_exception.lib;C:\.conan\f7e8fe\1\lib\libboost_wave.lib;C:\.conan\f7e8fe\1\lib\libboost_filesystem.lib;C:\.conan\f7e8fe\1\lib\libboost_system.lib;C:\.conan\f7e8fe\1\lib\libboost_wserialization.lib;C:\.conan\f7e8fe\1\lib\libboost_serialization.lib;bcrypt.lib;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\zlib.lib;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\lib\bz2.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\iconv.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\charset.lib;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\lib\nlopt.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_intel_lp64.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_sequential.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/lib/nataf_gsa.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/bin/nataf_gsa.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;BOOST_ALL_NO_LIB;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lib_armadillo\armadillo-10.1.0\include;C:\.conan\f7e8fe\1\include;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\include;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\include;C:\Users\yisan\.conan\data\jsonformoderncpp\3.7.0\vthiery\stable\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\.conan\f7e8fe\1\lib\libboost_contract.lib;C:\.conan\f7e8fe\1\lib\libboost_coroutine.lib;C:\.conan\f7e8fe\1\lib\libboost_fiber.lib;C:\.conan\f7e8fe\1\lib\libboost_context.lib;C:\.conan\f7e8fe\1\lib\libboost_graph.lib;C:\.conan\f7e8fe\1\lib\libboost_iostreams.lib;C:\.conan\f7e8fe\1\lib\libboost_log_setup.lib;C:\.conan\f7e8fe\1\lib\libboost_log.lib;C:\.conan\f7e8fe\1\lib\libboost_locale.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_c99l.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1f.lib;C:\.conan\f7e8fe\1\lib\libboost_math_tr1l.lib;C:\.conan\f7e8fe\1\lib\libboost_nowide.lib;C:\.conan\f7e8fe\1\lib\libboost_program_options.lib;C:\.conan\f7e8fe\1\lib\libboost_random.lib;C:\.conan\f7e8fe\1\lib\libboost_regex.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_noop.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg.lib;C:\.conan\f7e8fe\1\lib\libboost_stacktrace_windbg_cached.lib;C:\.conan\f7e8fe\1\lib\libboost_timer.lib;C:\.conan\f7e8fe\1\lib\libboost_type_erasure.lib;C:\.conan\f7e8fe\1\lib\libboost_thread.lib;C:\.conan\f7e8fe\1\lib\libboost_atomic.lib;C:\.conan\f7e8fe\1\lib\libboost_chrono.lib;C:\.conan\f7e8fe\1\lib\libboost_container.lib;C:\.conan\f7e8fe\1\lib\libboost_date_time.lib;C:\.conan\f7e8fe\1\lib\libboost_unit_test_framework.lib;C:\.conan\f7e8fe\1\lib\libboost_prg_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_test_exec_monitor.lib;C:\.conan\f7e8fe\1\lib\libboost_exception.lib;C:\.conan\f7e8fe\1\lib\libboost_wave.lib;C:\.conan\f7e8fe\1\lib\libboost_filesystem.lib;C:\.conan\f7e8fe\1\lib\libboost_system.lib;C:\.conan\f7e8fe\1\lib\libboost_wserialization.lib;C:\.conan\f7e8fe\1\lib\libboost_serialization.lib;bcrypt.lib;C:\Users\yisan\.conan\data\zlib\1.2.11\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\zlib.lib;C:\Users\yisan\.conan\data\bzip2\1.0.8\_\_\package\d16a91eadaaf5829b928b12d2f836ff7680d3df5\lib\bz2.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\iconv.lib;C:\Users\yisan\.conan\data\libiconv\1.16\_\_\package\3fb49604f9c2f729b85ba3115852006824e72cab\lib\charset.lib;C:\Users\yisan\.conan\data\nlopt\2.6.2\_\_\package\d184e2284c578c608291c4a9203d0bb72569f800\lib\nlopt.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_intel_lp64.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_sequential.lib;C:\Users\yisan\.conan\data\mkl-static\2019.4\simcenter\stable\package\4068d26db0f235082dbcdd6f303d1cbf4d149cf1\lib\mkl_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/lib/nataf_gsa.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/bin/nataf_gsa.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/Development/nataf_gsa_cpp -BC:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2 --check-stamp-file C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\WindowsPaths.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCXXCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeRCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeSystem.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\conanbuildinfo.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/Development/nataf_gsa_cpp -BC:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2 --check-stamp-file C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\WindowsPaths.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCXXCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeRCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeSystem.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\conanbuildinfo.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/Development/nataf_gsa_cpp -BC:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2 --check-stamp-file C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\WindowsPaths.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCXXCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeRCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeSystem.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\conanbuildinfo.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/Development/nataf_gsa_cpp -BC:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2 --check-stamp-file C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.17\Modules\Platform\WindowsPaths.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeCXXCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeRCCompiler.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\3.17.0-rc3\CMakeSystem.cmake;C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\conanbuildinfo.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\main.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\ERADist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\exponentialDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\normalDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\ERANataf.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\gammaDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\runGSA.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\runForward.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\RVDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\gumbelDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\truncExponentialDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\betaDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\jsonInput.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\uniformDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\chiSquaredDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\lognormalDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\weibullDist.cpp" />
+    <ClCompile Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\discreteDist.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\ZERO_CHECK.vcxproj">
+      <Project>{67562BF9-CA8F-3008-ADBA-6A2E351B91F3}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

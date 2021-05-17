@@ -178,6 +178,7 @@
     <ClInclude Include="jsonInput.h" />
     <ClInclude Include="lognormalDIst.h" />
     <ClInclude Include="normalDist.h" />
+    <ClInclude Include="runForward.h" />
     <ClInclude Include="runGSA.h" />
     <ClInclude Include="RVDist.h" />
     <ClInclude Include="truncExponentialDist.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="lognormalDIst.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="normalDist.cpp" />
+    <ClCompile Include="runForward.cpp" />
     <ClCompile Include="runGSA.cpp" />
     <ClCompile Include="RVDist.cpp" />
     <ClCompile Include="truncExponentialDist.cpp" />

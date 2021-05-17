@@ -461,7 +461,10 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 		for (int ng = 0; ng < inp.nreg; ng++)
 		{
 			for (int nr : inp.resamplingGroups[ng])
+			{
 				x[ns][nr] = inp.vals[nr][resampIDs[ns][ng]];
+				std::cout << x[ns][nr] << nr <<  std::endl;
+			}
 		}
 
 		// for constants

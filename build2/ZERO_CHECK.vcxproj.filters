@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\yisan\Desktop\Development\nataf_gsa_cpp\build2\CMakeFiles\b8564af730ba6c50b4ece49bdfefe370\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{B19EED99-98BC-3600-A41C-C316A01A39FC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
