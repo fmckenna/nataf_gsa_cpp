@@ -1,4 +1,0 @@
-C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/nataf_gsa.dir
-C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/INSTALL.dir
-C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/ALL_BUILD.dir
-C:/Users/yisan/Desktop/Development/nataf_gsa_cpp/build2/CMakeFiles/ZERO_CHECK.dir
