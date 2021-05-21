@@ -15,10 +15,7 @@ set(SOURCES main.cpp
 	    ERANataf.cpp
 	    gammaDist.cpp
 	    runGSA.cpp
-<<<<<<< HEAD
-=======
 	    runForward.cpp
->>>>>>> upstream/master
 	    RVDist.cpp
 	    gumbelDist.cpp
 	    truncExponentialDist.cpp
@@ -31,19 +28,12 @@ set(SOURCES main.cpp
 	    discreteDist.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib_armadillo/armadillo-10.1.0/include)
+include_directories(/usr/local/Cellar/boost/1.75.0_3/include/)
 
 add_executable(nataf_gsa ${SOURCES})
 target_link_libraries(nataf_gsa
-	CONAN_PKG::boost
 	CONAN_PKG::jsonformoderncpp	
 	CONAN_PKG::nlopt
-<<<<<<< HEAD
-	CONAN_PKG::mkl-static
-	CONAN_PKG::eigen)
-
-
-install(TARGETS nataf_gsa DESTINATION bin)
-=======
 	CONAN_PKG::mkl-static)
 
 #target_link_libraries(nataf_gsa
@@ -57,4 +47,3 @@ install(TARGETS nataf_gsa DESTINATION bin)
 
 add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
 
->>>>>>> upstream/master

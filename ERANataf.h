@@ -4,11 +4,7 @@
 
 using std::string;
 using std::vector;
-<<<<<<< HEAD
-#include "Eigen/Dense"
-=======
 #include "lib_eigen/Eigen/Dense"
->>>>>>> upstream/master
 
 
 extern std::ofstream theErrorFile; // Error log
