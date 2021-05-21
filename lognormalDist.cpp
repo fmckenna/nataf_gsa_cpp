@@ -20,7 +20,7 @@ lognormalDist::lognormalDist(string opt, vector<double> val, vector<double> add)
 	if (opt.compare("PAR") == 0)
 	{
 
-		if (val.size()!= npa)
+		if (val.size() != npa)
 		{
 			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
@@ -67,6 +67,14 @@ lognormalDist::lognormalDist(string opt, vector<double> val, vector<double> add)
 	}
 	else if (opt.compare("DAT") == 0)
 	{
+
+		double minSmp = *std::min_element(std::begin(val), std::end(val));
+		if (minSmp < 0)
+		{
+			theErrorFile << "Error running UQ engine: samples of " << name << " distribution exceeds the range [0,inf]" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
 		{
 			const int np = 1;
 
@@ -86,11 +94,36 @@ lognormalDist::lognormalDist(string opt, vector<double> val, vector<double> add)
 	}
 	boost::math::lognormal_distribution<> lognDist1(lambda, zeta); // shape k, scale theta=1/lambda (or 1/lognormal)
 	lognDist = lognDist1;
-
+	checkParams();
 }
 
 lognormalDist::~lognormalDist() {}
 
+
+void lognormalDist::checkParams()
+{
+	double std = getStd();
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " should be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	double mean = getMean();
+	if (mean <= 0)
+	{
+		theErrorFile << "Error running UQ engine: mean of " << name << " should be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+	vector<double> par = getParam();
+	if (par[1] <= 0)
+	{ 
+		theErrorFile << "Error running UQ engine: zeta of " << name << " should be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
 //==
 
 double lognormalDist::getPdf(double x)

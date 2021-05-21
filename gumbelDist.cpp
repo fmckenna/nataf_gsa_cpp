@@ -26,9 +26,9 @@ gumbelDist::gumbelDist(string opt, vector<double> val, vector<double> add)
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) || (val[1] <= 0))
+		else if ((val[0] <= 0))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: scale parameter of " << name << " distribution must be greater than 0 " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -51,7 +51,7 @@ gumbelDist::gumbelDist(string opt, vector<double> val, vector<double> add)
 		}
 		else if (val[1] <= 0)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " distribution must be greater than 0 " << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -122,12 +122,34 @@ gumbelDist::gumbelDist(string opt, vector<double> val, vector<double> add)
 	// =(bn, an) in ERADist
 	// =(bet, 1/alp) Dakota manual
 	// User input of quoFEM & Dakota : alp, bet
-
+	checkParams();
 }
 
 gumbelDist::~gumbelDist() {}
 
 //==
+
+void gumbelDist::checkParams()
+{
+	double std = getStd();
+	double mean = getMean();
+	vector<double> par = getParam();
+
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if (par[0] <= 0)
+	{
+		theErrorFile << "Error running UQ engine: scale parameter of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
+
 
 double gumbelDist::getPdf(double x)
 {
@@ -182,14 +204,19 @@ double nnlGumb(unsigned n, const double* x, double* grad, void* my_func_data)
 	my_samples* samp = (my_samples*)my_func_data;
 	vector<double> xs = samp->xs;
 
+	double loc = x[1];
+	double sca = 1/x[0];
+
 	for (int i = 0; i < xs.size(); i++)
 	{
-		nll += -log(pdf(gumbDist1,xs[i]));
+		//nll += -log(pdf(gumbDist1,xs[i]));
+		nll += log(sca)+(xs[i]- loc)/sca + exp(-(xs[i] - loc) / sca);
 	}
 	if (grad) {
 		grad[0] = 0;
 	}
 	return nll;
+
 }
 
 

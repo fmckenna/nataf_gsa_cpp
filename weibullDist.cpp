@@ -29,9 +29,9 @@ weibullDist::weibullDist(string opt, vector<double> val, vector<double> add): we
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) && (val[1] <= 0))
+		else if (!((val[0] > 0) && (val[1] > 0)))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: parameters of " << name << " distribution must be greater than 0" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -50,9 +50,9 @@ weibullDist::weibullDist(string opt, vector<double> val, vector<double> add): we
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) && (val[1] <= 0)) // not integer
+		else if (!((val[0] > 0) && (val[1] > 0))) 
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: parameters of " << name << " distribution must be greater than 0" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -87,6 +87,15 @@ weibullDist::weibullDist(string opt, vector<double> val, vector<double> add): we
 	}
 	else if (opt.compare("DAT") == 0)
 	{
+
+		double minSmp = *std::min_element(std::begin(val), std::end(val));
+		if (minSmp < 0)
+		{
+			theErrorFile << "Error running UQ engine: samples of " << name << " distribution exceeds the range [0,inf]" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+
 		const int np = 2;
 		//double lb[np] = { -HUGE_VAL, 0 };
 		//const double  *lb = { 0 };
@@ -128,11 +137,41 @@ weibullDist::weibullDist(string opt, vector<double> val, vector<double> add): we
 
 	weibull weibDist1(k,an);
 	weibDist = weibDist1;
+	checkParams();
 
 }
 
 weibullDist::~weibullDist() {}
 //==
+
+
+void weibullDist::checkParams()
+{
+	double std = getStd();
+	double mean = getMean();
+	vector<double> par = getParam();
+
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if (mean<=0)
+	{
+		theErrorFile << "Error running UQ engine: mean of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if (!(par[0] > 0 && (par[1] > 0)))
+	{
+		theErrorFile << "Error running UQ engine: parameters of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
 
 
 double weibullDist::getPdf(double x)

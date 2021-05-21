@@ -147,14 +147,14 @@ ERANataf::ERANataf(jsonInput inp)
 					printf("nlopt failed!\n");
 					theErrorFile << "Error running UQ engine: Nataf optimization filed" << std::endl;
 					theErrorFile.close();
-					exit(1);
+					exit(-1);
 				}
 				else if (minf > 1.e-5)
 				{
 					printf("nlopt failed!\n");
 					theErrorFile << "Error running UQ engine: Nataf optimization did not converge" << std::endl;
 					theErrorFile.close();
-					exit(1);
+					exit(-1);
 				}
 				else {
 					//printf("found minimum at f(%g) = %0.10g\n", Rhozij[0], minf);
@@ -446,13 +446,34 @@ double ERANataf::normCdf(double x)
 	return 0.5 * (1.0 + sign * y);
 }
 
-void ERANataf::simulateApp(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<double>> &x, vector<vector<double>> &gval)
+void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<int>> resampIDs, vector<vector<double>> &x, vector<vector<double>> &gval)
 {
 	//
 	// Change from u to x;
 	//
 
 	x = U2X(inp.nmc, u);
+	std::vector<double> zero_vector(inp.nre, 0);
+	for (int ns = 0; ns < inp.nmc; ns++)
+	{
+		// for resampling
+		x[ns].insert(x[ns].end(), zero_vector.begin(), zero_vector.end());
+		for (int ng = 0; ng < inp.nreg; ng++)
+		{
+			for (int nr : inp.resamplingGroups[ng])
+			{
+				x[ns][nr] = inp.vals[nr][resampIDs[ns][ng]];
+				std::cout << x[ns][nr] << nr <<  std::endl;
+			}
+		}
+
+		// for constants
+		for (int j = 0; j < inp.nco; j++)
+			x[ns].push_back(inp.constants[j]);
+
+		std::cerr << x[ns][0] <<"  "  << x[ns][1] << "  " << x[ns][2] << "  " << x[ns][3] << "\n";
+
+	}
 
 	//
 	// Run Apps
@@ -511,8 +532,8 @@ void ERANataf::simulateApp(string osType, string runType, jsonInput inp, vector<
 		string params = workDir + "/params.in";
 		std::ofstream writeFile(params.data());
 		if (writeFile.is_open()) {
-			writeFile << std::to_string(inp.nrv) + "\n";
-			for (int j = 0; j < inp.nrv; j++) {
+			writeFile << std::to_string(inp.nrv+ inp.nco + inp.nre) + "\n";
+			for (int j = 0; j < inp.nrv+inp.nco + inp.nre; j++) {
 				writeFile << inp.rvNames[j] + " ";
 				writeFile << std::to_string(x[i][j]) + "\n";
 			}
@@ -543,10 +564,8 @@ void ERANataf::simulateApp(string osType, string runType, jsonInput inp, vector<
 			//*ERROR*
 			theErrorFile << "Error reading FEM results: check your inputs " << std::endl;
 			theErrorFile.close();
-			exit(1);
+			exit(-1);
 		}
-
-
 
 		vector<double> g_tmp(inp.nqoi);
 		if (readFile.is_open()) {
@@ -565,6 +584,125 @@ void ERANataf::simulateApp(string osType, string runType, jsonInput inp, vector<
 
 
 }
+
+
+
+void ERANataf::simulateAppSequential(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<double>>& xval, vector<vector<double>>& gval, int idx)
+{
+	//
+	// Change from u to x;
+	//
+
+	vector<vector<double>> x = U2X(1, u);
+	for (int j = 0; j < inp.nco; j++)
+		x[0].push_back(inp.constants[j]);
+
+	//
+	// Run Apps
+	//
+
+	std::string copyDir = inp.workDir + "/templatedir";
+
+	std::cerr << "workdir:" << inp.workDir << "\n";
+	std::cerr << "copyDir:" << copyDir << "\n";
+	
+	//
+	// (1) create "workdir.idx " folder :need C++17 to use the files system namespace 
+	//
+
+	string workDir = inp.workDir + "/workdir." + std::to_string(idx + 1);
+
+	std::cerr << "workDir:" << workDir << "\n";
+
+	//
+	// (2) copy files from templatedir to workdir.idx
+	//
+
+	const auto copyOptions =
+		std::filesystem::copy_options::update_existing
+		| std::filesystem::copy_options::recursive;
+
+	/*
+	const auto copyOptions = std::filesystem::copy_options::overwrite_existing;
+	*/
+
+	try
+	{
+		std::filesystem::copy(copyDir, workDir, copyOptions);
+	}
+	catch (std::exception & e)
+	{
+		std::cout << e.what();
+	}
+
+
+	std::filesystem::current_path(workDir);
+
+	/*
+	if (ok != true) {
+		std::cerr << "my_nataf - could not copy files to " << workDir << "\n";
+	}
+	*/
+
+	//
+	// (3) write param.in file
+	//
+
+	string params = workDir + "/params.in";
+	std::ofstream writeFile(params.data());
+	if (writeFile.is_open()) {
+		writeFile << std::to_string(inp.nrv + inp.nco) + "\n";
+		for (int j = 0; j < inp.nrv+inp.nco; j++) {
+			writeFile << inp.rvNames[j] + " ";
+			writeFile << std::to_string(x[0][j]) + "\n";
+		}
+		writeFile.close();
+	}
+	
+	//
+	// (4) run workflow_driver.bat(e.g. It will make "SimCenterInput.tcl" and run OpenSees)
+	//
+
+	std::string workflowDriver = "workflow_driver";
+	if ((osType.compare("Windows") == 0) && (runType.compare("runningLocal") == 0))
+		workflowDriver = "workflow_driver.bat";
+
+	string workflowDriver_string = workDir + "/" + workflowDriver;
+
+	const char* workflowDriver_char = workflowDriver_string.c_str();
+	system(workflowDriver_char);
+
+	//
+	// (5) get the values in "results.out"
+	//
+
+	string results = workDir + "/results.out";
+	std::ifstream readFile(results.data());
+
+	if (!readFile.is_open()) {
+		//*ERROR*
+		theErrorFile << "Error reading FEM results: check your inputs " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+
+
+	vector<double> g_tmp(inp.nqoi);
+	if (readFile.is_open()) {
+		int j = 0;
+		double g;
+		while (readFile >> g) {
+			g_tmp[j] = g;
+			j++;
+		}
+		readFile.close();
+	}
+
+	gval.push_back(g_tmp);
+	xval.push_back(x[0]);
+}
+
 
 
 

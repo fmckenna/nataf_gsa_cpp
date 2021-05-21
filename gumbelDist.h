@@ -28,5 +28,7 @@ public:
 private:
 	double alp,bet; // NOTE: alpha=1/an, beta=bn in ERA
 	//double EC = 0.57721566490153; // euler constant
-	double EC = 0.57721566490153286060651209008240243104215933593992;
+	double EC = 0.577215664901532860606512090082;
+	void checkParams();
+
 };

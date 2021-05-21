@@ -22,15 +22,20 @@ public:
 	virtual ~jsonInput(void);
 
 	string workDir;
+	string uqType;
+
 	int nmc;
 	int nrv;
 	int nco;
+	int nre;
+	int nreg;
 	int nqoi;
 	int rseed;
 	int ngr;
 	string UQmethod;
 	vector<string> distNames;
 	vector<vector<double>> vals;
+	vector<vector<double>> resampleCandidates;
 	vector<double> constants;
 	vector<string> opts;
 	vector<string> rvNames;
@@ -38,9 +43,13 @@ public:
 	vector<vector<double>> corr;
 	vector<vector<double>> adds;
 	vector<vector<int>> groups;
+	vector<vector<int>> resamplingGroups;
+	vector<int> resamplingSize;
 
 private:
 	void getPnames(string distname, string optname, vector<std::string>& par_char);
+	void fromTextToStr(string groupTxt, vector<vector<string>>& groupStringVector, vector<string>& flattenStringVect);
+	void fromTextToId(string groupTxt, vector<string>& groupPool, vector<vector<int>>& groupIdVect);
 
 };
 

@@ -10,13 +10,14 @@ runGSA::runGSA(vector<vector<double>> xval,
 	int Kos)
 {
 	this->xval = xval;
+	this->gval = gmat;
 	this->combs_tmp = combs_tmp;
 	nmc = xval.size();
-	this->Kos = std::min(Kos, int(nmc / 5));
 
 	nrv = xval[0].size();
 	ncombs = combs_tmp.size(); 
 	int nqoi = gmat[0].size();
+	Kos = std::min(Kos, int(nmc / 5));
 
 	// for each QoI
 	for (int j = 0; j < nqoi; j++) {
@@ -46,10 +47,27 @@ runGSA::runGSA(vector<vector<double>> xval,
 			exit(1);
 		};
 
-		vector<double> Stj = doGSA(gvec, 'M');
-		vector<double> Sij = doGSA(gvec, 'T');
+		vector<double> Sij, Stj;
 
-		vector<double> Si_temp, St_temp;
+
+		// repeat GSA with different Kos untill success
+		double failIdx = -100, i = 1;
+		while ((failIdx == -100) || (Kos/i < 0.5))
+		{
+			Sij = doGSA(gvec, ceil(Kos/i),'M');
+			failIdx = Sij[0];
+			i *=2;
+		}
+
+		failIdx = -100, i = 1;
+		while ((failIdx == -100) || (Kos / i < 0.5))
+		{
+			Stj = doGSA(gvec, ceil(Kos/i), 'T');
+			failIdx = Stj[0];
+			i *= 2;
+		}
+
+		vector<double> Si_temp, Kos,St_temp;
 
 
 		Simat.push_back(Stj);
@@ -57,7 +75,7 @@ runGSA::runGSA(vector<vector<double>> xval,
 	}
 }
 
-vector<double> runGSA::doGSA(vector<double> gval,char Opt)
+vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 {
 	vector<vector<int>> combs;
 
@@ -185,8 +203,6 @@ vector<double> runGSA::doGSA(vector<double> gval,char Opt)
 				muki.subvec(k, k) = mug(k) + SiginvSig.slice(k) * (xi - muval);
 				pik_tmp(k) = pi(k) * mvnPdf(xi, muval, cov.subcube(0, 0, k, endx, endx, k));
 
-				//double a = mvnPdf(xi, muval, cov.subcube(0, 0, k, endx, endx, k));
-				//mat v = cov.subcube(0, 0, k, endx, endx, k);
 			}
 
 			rowvec piki = pik_tmp / sum(pik_tmp);
@@ -207,6 +223,11 @@ vector<double> runGSA::doGSA(vector<double> gval,char Opt)
 		}
 
 		printf("GSA i=%i, Si=%.2f, K=%i \n", nc + 1, Si[nc], Kos);
+
+		if (isinf(Si[nc]) || isnan(Si[nc]))
+		{
+			return { -100 };
+		}
 	}
 
 	return Si;
@@ -242,4 +263,102 @@ double runGSA::calVar(vector<double> x) {
 		});
 	//std::cout << (accum / (x.size())) << std::endl;
 	return (accum / (x.size()));
+}
+
+
+
+double runGSA::writeOutputs(jsonInput inp)
+{
+	// dakota.out
+	string writingloc = inp.workDir + "/dakota.out";
+	std::ofstream outfile(writingloc);
+
+	if (!outfile.is_open()) {
+		theErrorFile << "Error running UQ engine: Unable to write dakota.out";
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	outfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format
+	outfile.precision(4); // for fixed format
+
+	outfile << "* number of input combinations" << std::endl;
+	outfile << inp.ngr << std::endl;
+
+	outfile << "* input names" << std::endl;
+	for (int i = 0; i < inp.ngr; i++) {
+		for (int j = 0; j < inp.groups[i].size() - 1; j++) {
+			outfile << inp.rvNames[inp.groups[i][j]] << ",";
+		}
+		outfile << inp.rvNames[inp.groups[i][inp.groups[i].size() - 1]] << std::endl;
+	}
+
+	outfile << "* number of outputs" << std::endl;
+	outfile << inp.nqoi << std::endl;
+
+	outfile << "* output names" << std::endl;
+	for (int i = 0; i < inp.nqoi; i++) {
+		outfile << inp.qoiNames[i] << std::endl;
+	}
+
+	outfile << "* ";
+	for (int j = 0; j < inp.ngr; j++) {
+		outfile << "Sm(" << std::to_string(j + 1) << ")  ";
+	}
+	for (int j = 0; j < inp.ngr; j++) {
+		outfile << "St(" << std::to_string(j + 1) << ")  ";
+	}
+	outfile << std::endl;
+
+	for (int i = 0; i < inp.nqoi; i++) {
+
+		for (int j = 0; j < inp.ngr; j++) {
+			outfile << Simat[i][j] << " ";
+		}
+		for (int j = 0; j < inp.ngr; j++) {
+			outfile << Stmat[i][j] << " ";
+		}
+		outfile << std::endl;
+	}
+
+	outfile << "* number of samples" << std::endl;
+	outfile << inp.nmc << std::endl;
+	outfile.close();
+
+	// dakotaTab.out
+	std::string writingloc1 = inp.workDir + "/dakotaTab.out";
+	std::ofstream Taboutfile(writingloc1);
+
+	if (!Taboutfile.is_open()) {
+		theErrorFile << "Error running UQ engine: Unable to write dakotaTab.out";
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	Taboutfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format
+	Taboutfile.precision(10); // for fixed format
+
+	Taboutfile << "idx         ";
+	for (int j = 0; j < inp.nrv + inp.nco + inp.nre; j++) {
+		Taboutfile << inp.rvNames[j] << "           ";
+	}
+	for (int j = 0; j < inp.nqoi; j++) {
+		Taboutfile << inp.qoiNames[j] << "            ";
+	}
+	Taboutfile << std::endl;
+
+
+	for (int i = 0; i < inp.nmc; i++) {
+		Taboutfile << std::to_string(i + 1) << "    ";
+		for (int j = 0; j < inp.nrv + inp.nco + inp.nre; j++) {
+			Taboutfile << std::to_string(xval[i][j]) << "    ";
+		}
+		for (int j = 0; j < inp.nqoi; j++) {
+			Taboutfile << std::to_string(gval[i][j]) << "    ";
+		}
+		Taboutfile << std::endl;
+	}
+
+	theErrorFile.close();
+
 }

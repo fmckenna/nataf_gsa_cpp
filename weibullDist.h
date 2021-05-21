@@ -22,10 +22,10 @@ public:
 	double getQuantile(double p);
 	string getName(void);
 	vector<double> getParam(void);
-
 	weibull weibDist;
 
 private:
 	double an,k;
+	void checkParams(void);
 	
 };

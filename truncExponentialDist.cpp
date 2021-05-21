@@ -21,13 +21,19 @@ truncExponentialDist::truncExponentialDist(string opt, vector<double> val, vecto
 	{
 		if (val.size() != np)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ((val[0] <= 0) || (val[1]<=0) || (val[1]>val[2]))
+		else if (val[0] <= 0) 
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: paramter of " << name << " distribution must be greater than 0" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+		else if ((val[1] <= 0) || (val[1] > val[2]))
+		{
+			theErrorFile << "Error running UQ engine: range of " << name << " distribution is not valid" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -43,13 +49,19 @@ truncExponentialDist::truncExponentialDist(string opt, vector<double> val, vecto
 
 		if (val.size() != np)
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: " << name << " distribution is not defined for your parameters" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
-		else if ( (val[0] <= 0) || (val[1]<=0) || (val[1]>val[2]) || (2*val[0]>=(val[1]+val[2])) )
+		else if ((val[1] <= 0) || (val[1] > val[2]))
 		{
-			theErrorFile << "Error running UQ engine: The " << name << " distribution is not defined for your parameters" << std::endl;
+			theErrorFile << "Error running UQ engine: range of " << name << " distribution is not valid" << std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+		else if ( (val[0] <= 0) || (2*val[0]>=(val[1]+val[2])) )
+		{
+			theErrorFile << "Error running UQ engine: parameter of " << name << " distribution cannot be defined for your input" << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -95,6 +107,16 @@ truncExponentialDist::truncExponentialDist(string opt, vector<double> val, vecto
 		a = add[0];
 		b = add[1];
 
+		double maxSmp = *std::max_element(std::begin(val), std::end(val));
+		double minSmp = *std::min_element(std::begin(val), std::end(val));
+		if ((maxSmp > b) || (minSmp < a))
+		{
+			theErrorFile << "Error running UQ engine: samples of " << name;
+			theErrorFile << " distribution exceeds the range [min,max]=[" << a << "," << b << "]"<<std::endl;
+			theErrorFile.close();
+			exit(-1);
+		}
+
 		const int np = 1;
 
 		// data
@@ -110,8 +132,8 @@ truncExponentialDist::truncExponentialDist(string opt, vector<double> val, vecto
 		}
 		mu = mu / ns;
 		lambda = { 1 / mu };
-		// MLE optimization
 		double lb[1] = { 1.e-10 };
+		// MLE optimization
 		nlopt_opt optim;
 		optim = nlopt_create(NLOPT_LN_COBYLA, np); // derivative-free algorithm
 		nlopt_set_lower_bounds(optim, lb);
@@ -134,12 +156,40 @@ truncExponentialDist::truncExponentialDist(string opt, vector<double> val, vecto
 
 	exponential expDist1(lambda);
 	expDist = expDist1;
-
 	normConst=cdf(expDist,b)-cdf(expDist,a);
+	checkParams();
 }
 
 truncExponentialDist::~truncExponentialDist() {}
 
+
+void truncExponentialDist::checkParams()
+{
+	double std = getStd();
+	double mean = getMean();
+	vector<double> par = getParam();
+
+	if (isnan(std) || isinf(std) || std <= 0)
+	{
+		theErrorFile << "Error running UQ engine: stdandard deviation of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if ((mean <= par[1]) || (mean >= par[2]))
+	{
+		theErrorFile << "Error running UQ engine: parameter of " << name << " distribution cannot be defined for the input" << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	if (!(par[0] > 0))
+	{
+		theErrorFile << "Error running UQ engine: parameter of " << name << " distribution must be greater than 0 " << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+}
 
 double truncExponentialDist::getPdf(double x)
 {

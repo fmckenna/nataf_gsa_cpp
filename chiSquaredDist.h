@@ -27,5 +27,6 @@ public:
 
 private:
 	double k;
-	
+	void checkParams();
+
 };

@@ -13,3 +13,7 @@ Release
 *.user
 *~
 build
+
+# Libraries
+*.lib
+*.dll

@@ -29,7 +29,7 @@ private:
 };
 
 // For MLE optimization
-typedef struct {
+typedef struct MLEstr {
 	vector<double> xs;
 	vector<double> add = {};
 } my_samples;
