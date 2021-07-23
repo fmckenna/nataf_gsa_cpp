@@ -28,6 +28,8 @@ public:
 			int Kos);
 	~runGSA();
 	double writeOutputs(jsonInput inp);
+	double writeTabOutputs(jsonInput inp);
+
 
 	//vector<double> Si;
 

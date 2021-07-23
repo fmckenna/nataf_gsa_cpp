@@ -64,16 +64,28 @@ int main(int argc, char** argv)
 	std::cout<<std::to_string(nreg);
 
 	vector<vector<int>> resampIDs(nmc, vector<int>(nreg, 0.0));
-	for (int nr = 0; nr < nreg; nr++)
+
+	for (int nr = 0; nr < nreg; nr++) // if {0,1},{2,3}, nrg is 2
 	{
-		std::uniform_int_distribution<int> discrete_dist(0, inp.resamplingSize[nr]-1);
-		for (int ns = 0; ns < nmc; ns++)
-		{
-			resampIDs[ns][nr] = discrete_dist(generator);
-			std::cout << resampIDs[ns][nr] << std::endl;
+		if (nmc > inp.resamplingSize[nr])	{ 
+			std::uniform_int_distribution<int> discrete_dist(0, inp.resamplingSize[nr] - 1);
+			for (int ns = 0; ns < nmc; ns++)
+			{
+				resampIDs[ns][nr] = discrete_dist(generator);
+				std::cout << resampIDs[ns][nr] << std::endl;
+			}
+		} else {
+			std::vector<int> v(nmc); // vector with nmc ints.
+			std::iota(std::begin(v), std::end(v), 0); // Fill with 0, 1, ..., 99.
+			std::shuffle(v.begin(), v.end(), generator);
+			for (int ns = 0; ns < nmc; ns++)
+			{
+				resampIDs[ns][nr] = v[ns];
+				std::cout << resampIDs[ns][nr] << std::endl;
+			}
+
 		}
 	}
-
 	
 	//
 	//	(4-1) FE Analysis - (batch samples)
@@ -102,7 +114,11 @@ int main(int argc, char** argv)
 		//std::cout<< gvals[ns][0] << " " << gvals[ns][1] << std::endl;
 	}	
 */
-
+	runForward ForwardResults(xvals, gvals);
+	//
+	//	Write dakotaTab.out
+	//
+	ForwardResults.writeTabOutputs(inp);
 
 	if (!inp.uqType.compare("Sensitivity Analysis")) {
 		//
@@ -111,20 +127,21 @@ int main(int argc, char** argv)
 		int Kos = 25;
 		runGSA GsaResults(xvals, gvals, inp.groups, Kos);
 		//
-		//	Write files/dakota.out, dakotaTab.out
+		//	Write  dakota.out
 		//
 
 		GsaResults.writeOutputs(inp);
 	}
 	else if (!inp.uqType.compare("Forward Propagation")) {
+
 		//
 		//	(5) Forward analysis
 		//
-		runForward ForwardResults(xvals, gvals);
 		//
-		//	Write files/dakota.out, dakotaTab.out
+		//	Write  dakota.out
 		//
 		ForwardResults.writeOutputs(inp);
+
 	}
 
 	

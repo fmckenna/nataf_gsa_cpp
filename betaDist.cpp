@@ -2,7 +2,7 @@
 
 #include "betaDist.h"
 #include "nlopt.hpp"
-
+ 
 #include <algorithm>
 #include <iostream>
 #include <fstream>

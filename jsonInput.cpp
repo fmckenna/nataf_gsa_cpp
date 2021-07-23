@@ -21,14 +21,21 @@ jsonInput::jsonInput(string workDir)
 
 	//json UQjson = json::parse(myfile);
 
-	// 
-	// Get variables
-	// 
+	uqType = UQjson["UQ_Method"]["uqType"];
+
+	if ((uqType.compare("Forward Analysis") == 0) || (uqType.compare("Sensitivity Analysis") == 0)) {
+		// pass
+	} else
+	{
+		//*ERROR*
+		theErrorFile << "Error reading json: 'Forward Analysis' or 'Sensitivity Analysis' backend is called, but the user requested " << UQjson["UQ_Method"]["uqType"] << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
 
 	nmc = UQjson["UQ_Method"]["samplingMethodData"]["samples"];
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQmethod = UQjson["UQ_Method"]["samplingMethodData"]["method"];
-	uqType = UQjson["UQ_Method"]["uqType"];
 	//
 	// Specify parameters in each distributions.
 	//
@@ -313,8 +320,16 @@ jsonInput::jsonInput(string workDir)
 	nqoi = 0;
 	for (auto& elem : UQjson["EDP"]) {
 		// *name of distribution
-		qoiNames.push_back(elem["name"]);
-		nqoi++;
+		if (elem["length"] == 1) {
+			qoiNames.push_back(elem["name"]);
+			nqoi++;
+		} else if (elem["length"] > 1) {
+			std::string name = elem["name"];
+			for (int j=0; j < elem["length"]; j++) {
+				qoiNames.push_back(name + "_" + std::to_string(j+1));
+				nqoi++;
+			}
+		}
 	}
 
 	//
@@ -352,6 +367,13 @@ jsonInput::jsonInput(string workDir)
 //}
 	}
 
+
+	//
+	// get resampling group index matrix
+	//
+
+	fromTextToId(resampGroupTxt, rvNames, resamplingGroups);
+
 	//
 	// get group index matrix
 	//
@@ -366,30 +388,22 @@ jsonInput::jsonInput(string workDir)
 		for (int i = 0; i < nrv; i++) {
 			groups.push_back({i});
 		}
+		std::cout << nreg <<std::endl;
+		for (int i = 0; i < nreg; i++) {
+			for (int j = 0; j < size(resamplingGroups[i]); j++) {
+				groups.push_back({ resamplingGroups[i][j] });
+			}
+		}
+
 	}
 	ngr = groups.size();
 
 
 
-	//
-	// get resampling group index matrix
-	//
-
-	fromTextToId(resampGroupTxt, rvNames, resamplingGroups);
-
 	for (int i = 0; i < nreg; i++) {
 		int length_old = size(vals[resamplingGroups[i][0]]);
 		int length_data;
 		for (int j = 1; j < size(resamplingGroups[i]); j++) {
-			std::cout << resamplingGroups[i][j] << std::endl;
-			std::cout << size(vals) << std::endl;
-			std::cout << (rvNames[0]) << std::endl;
-			std::cout << rvNames[1] << std::endl;
-			std::cout << rvNames[2] << std::endl;
-			std::cout << rvNames[3] << std::endl;
-
-			std::cout << vals[resamplingGroups[i][j]][0] << std::endl;
-
 			length_data = size(vals[resamplingGroups[i][j]]);
 			if (length_data != length_old)
 			{
@@ -398,7 +412,6 @@ jsonInput::jsonInput(string workDir)
 				exit(-1);
 			}
 			length_old = length_data;
-			std::cout<< size(vals[resamplingGroups[i][j]]) <<std::endl;
 		}
 		resamplingSize.push_back(length_data);
 	}

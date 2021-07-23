@@ -138,6 +138,13 @@ double runForward::writeOutputs(jsonInput inp)
 	//outfile << inp.nmc << std::endl;
 	//outfile.close();
 
+	theErrorFile.close();
+
+}
+
+
+double runForward::writeTabOutputs(jsonInput inp)
+{
 	// dakotaTab.out
 	std::string writingloc1 = inp.workDir + "/dakotaTab.out";
 	std::ofstream Taboutfile(writingloc1);
@@ -171,7 +178,5 @@ double runForward::writeOutputs(jsonInput inp)
 		}
 		Taboutfile << std::endl;
 	}
-
-	theErrorFile.close();
 
 }

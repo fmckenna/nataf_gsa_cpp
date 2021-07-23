@@ -567,15 +567,22 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 			exit(-1);
 		}
 
-		vector<double> g_tmp(inp.nqoi);
+		vector<double> g_tmp;
 		if (readFile.is_open()) {
 			int j = 0;
 			double g;
 			while (readFile >> g) {
-				g_tmp[j] = g;
+				g_tmp.push_back(g);
 				j++;
 			}
 			readFile.close();
+
+			if (j != inp.nqoi) {
+				//*ERROR*
+				theErrorFile << "Error reading FEM results: the number of outputs in results.out does not match the number of QoIs specified " << std::endl;
+				theErrorFile.close();
+				exit(-1);
+			}
 		}
 
 		gval.push_back(g_tmp);
