@@ -25,12 +25,19 @@ int main(int argc, char** argv)
 	//std::string osType = "Windows";
 	//std::string runType = "runningLocal";
 
-	std::cerr << "WORK " << workDir << "\n";
-	std::cerr << "OS " << osType << "\n";
-	std::cerr << "RUN " << runType << "\n";
+	std::cout << "WORKDIR: " << workDir << "\n";
+	std::cout << "OS: " << osType << "\n";
+	std::cout << "RUN: " << runType << "\n";
 
-	theErrorFile.open(workDir+"/dakota.err");
-	
+	theErrorFile.open(workDir+"/dakota.err",'w');
+	std::string errMsg;
+	if (!theErrorFile.is_open()) {
+		errMsg = "Error running UQ engine: Failed to creat Dakota.err at " + workDir;
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
 	//
 	//  (1) read JSON file
 	//

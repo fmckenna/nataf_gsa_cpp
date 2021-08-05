@@ -145,7 +145,9 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 			int idx = combs[nc][ne];
 
 			if (idx > nrv - 1) {
-				theErrorFile << "Error running UQ engine: combination index exceeds the bound" << std::endl;
+				std::string errMsg = "Error running UQ engine: combination index exceeds the bound";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}
@@ -167,14 +169,18 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 
 		if (status == false)
 		{
-			theErrorFile << "Error running UQ engine: GSA learning failed" << std::endl;
+			std::string errMsg = "Error running UQ engine: GSA learning failed";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
 
 		if (Kos == 0)
 		{
-			theErrorFile << "Error running UQ engine: GSA learning failed. Try with more number of samples." << std::endl;
+			std::string errMsg ="Error running UQ engine: GSA learning failed. Try with more number of samples.";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -283,7 +289,10 @@ double runGSA::writeTabOutputs(jsonInput inp)
 	std::ofstream Taboutfile(writingloc1);
 
 	if (!Taboutfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakotaTab.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakotaTab.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
@@ -321,9 +330,13 @@ double runGSA::writeOutputs(jsonInput inp)
 	std::ofstream outfile(writingloc);
 
 	if (!outfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakota.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakota.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
+
 	}
 
 	outfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format

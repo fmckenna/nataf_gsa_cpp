@@ -144,15 +144,17 @@ ERANataf::ERANataf(jsonInput inp)
 				//double params;
 				
 				if (nlopt_optimize(optim, Rhozij, &minf) < 0) {
-					printf("nlopt failed!\n");
-					theErrorFile << "Error running UQ engine: Nataf optimization filed" << std::endl;
+					std::string errMsg = "Error running UQ engine: Nataf optimization failed (nlopt failed)";
+					std::cout << errMsg << "\n";
+					theErrorFile << errMsg << std::endl;
 					theErrorFile.close();
 					exit(-1);
 				}
 				else if (minf > 1.e-5)
 				{
-					printf("nlopt failed!\n");
-					theErrorFile << "Error running UQ engine: Nataf optimization did not converge" << std::endl;
+					std::string errMsg = "Error running UQ engine: Nataf optimization did not converge (nlopt failed)";
+					std::cout << errMsg << "\n";
+					theErrorFile << errMsg << std::endl;
 					theErrorFile.close();
 					exit(-1);
 				}
@@ -179,7 +181,9 @@ ERANataf::ERANataf(jsonInput inp)
 	
 	if (llt.info() == Eigen::NumericalIssue)
 	{
-		theErrorFile << "Error running UQ engine: Nataf transformation is not applicable (not positive definite)" << std::endl;
+		std::string errMsg = "Error running UQ engine: Nataf transformation is not applicable (not positive definite)";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
@@ -449,6 +453,30 @@ double ERANataf::normCdf(double x)
 void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<int>> resampIDs, vector<vector<double>> &x, vector<vector<double>> &gval)
 {
 	//
+	// If we find result.out in the templete dir. emit error;
+	//
+
+	std::string existingResultsFile = inp.workDir + "/templatedir/results.out";
+	if (std::filesystem::exists(existingResultsFile)) {
+		//*ERROR*
+		std::string errMsg = "Error running SimCenterUQ: your templete directory already contains results.out file. Please clean up the directory where input file is located.";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	std::string existingParamsFile = inp.workDir + "/templatedir/results.out";
+	if (std::filesystem::exists(existingParamsFile)) {
+		//*ERROR*
+		std::string errMsg = "Error running SimCenterUQ: your templete directory already contains params.in file. Please clean up the directory where input file is located.";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	//
 	// Change from u to x;
 	//
 
@@ -562,7 +590,9 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 
 		if (!readFile.is_open()) {
 			//*ERROR*
-			theErrorFile << "Error reading FEM results: check your inputs " << std::endl;
+			std::string errMsg = "Error running FEM: results.out missing in workdir." + std::to_string(i + 1) + ". Check your FEM inputs.";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -577,9 +607,19 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 			}
 			readFile.close();
 
+			if (j == 0) {
+				std::string errMsg = "Error running FEM: results.out file at workdir." + std::to_string(i + 1) + " is empty.";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
+				theErrorFile.close();
+				exit(-1);
+			}
+
 			if (j != inp.nqoi) {
 				//*ERROR*
-				theErrorFile << "Error reading FEM results: the number of outputs in results.out does not match the number of QoIs specified " << std::endl;
+				std::string errMsg = "Error reading FEM results: the number of outputs in results.out (" + std::to_string(j) + ") does not match the number of QoIs specified (" + std::to_string(inp.nqoi) + ")";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}
@@ -688,7 +728,10 @@ void ERANataf::simulateAppSequential(string osType, string runType, jsonInput in
 
 	if (!readFile.is_open()) {
 		//*ERROR*
-		theErrorFile << "Error reading FEM results: check your inputs " << std::endl;
+
+		std::string errMsg = "Error reading FEM results: check your inputs ";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}

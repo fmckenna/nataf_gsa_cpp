@@ -75,9 +75,13 @@ double runForward::writeOutputs(jsonInput inp)
 
 
 	if (!outfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakota.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakota.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
+
 	}
 
 
@@ -150,7 +154,10 @@ double runForward::writeTabOutputs(jsonInput inp)
 	std::ofstream Taboutfile(writingloc1);
 
 	if (!Taboutfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakotaTab.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakota.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
