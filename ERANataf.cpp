@@ -5,6 +5,7 @@
 #include <iostream>
 #include <random>
 #include <filesystem>
+#include <omp.h>
 
 //#include <chrono>
 #include "nlopt.hpp"
@@ -191,13 +192,14 @@ ERANataf::ERANataf(jsonInput inp)
 		A = llt.matrixL(); // 'Lower'
 	}
 
-	std::cout << "===RhoOpt===" << std::endl;
+	std::cout << "[RhoOpt]" << std::endl;
 	for (int nri = 0; nri < nrv; nri++)
 	{
 		for (int nrj = 0; nrj < nrv; nrj++)
 			printf("%3.2f  ", RhozMat(nri,nrj));
 		printf("\n");
 	}
+	printf("\n");
 }
 ERANataf::~ERANataf() {}
 
@@ -480,6 +482,8 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 	// Change from u to x;
 	//
 
+	std::cout << "[First 10 samples]" << std::endl;
+
 	x = U2X(inp.nmc, u);
 	std::vector<double> zero_vector(inp.nre, 0);
 	for (int ns = 0; ns < inp.nmc; ns++)
@@ -491,17 +495,22 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 			for (int nr : inp.resamplingGroups[ng])
 			{
 				x[ns][nr] = inp.vals[nr][resampIDs[ns][ng]];
-				std::cout << x[ns][nr] << nr <<  std::endl;
 			}
 		}
-
 		// for constants
 		for (int j = 0; j < inp.nco; j++)
 			x[ns].push_back(inp.constants[j]);
 
-		std::cerr << x[ns][0] <<"  "  << x[ns][1] << "  " << x[ns][2] << "  " << x[ns][3] << "\n";
-
 	}
+	for (int ns = 0; ns < std::min(inp.nmc,10) ; ns++)
+	{
+		for (int nr = 0; nr < inp.nrv; nr++)
+		{
+			std::cout << x[ns][nr] << "  ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 
 	//
 	// Run Apps
@@ -511,127 +520,139 @@ void ERANataf::simulateAppBatch(string osType, string runType, jsonInput inp, ve
 
 	std::cerr << "workdir:" << inp.workDir << "\n";
 	std::cerr << "copyDir:" << copyDir << "\n";
+	std::cerr << "runningFEM analysis.." << "\n\n";
 
-	for (int i = 0; i < inp.nmc; i++)
+	const size_t COL = 1;
+	const size_t  ROW = 1;
+	//gval.resize(inp.nmc, vector<int>(inp.nqoi, 0));
+
+	gval.resize(inp.nmc);
+	int i;
+	#pragma omp parallel for shared(gval) private(i)
+	for (i = 0; i < inp.nmc; i++)
 	{
+		gval[i] = simulateAppOnce(i, inp.workDir, copyDir, inp.nrv + inp.nco + inp.nre, inp.nqoi, inp.rvNames, x[i], osType, runType);
+	}
 
-		//
-		// (1) create "workdir.i " folder :need C++17 to use the files system namespace 
-		//
+}
 
-		string workDir = inp.workDir + "/workdir." + std::to_string(i + 1);
+vector<double> ERANataf::simulateAppOnce(int i, string workingDirs, string copyDir, int nrvcore, int nqoi, vector<string> rvNames, vector<double> xs, string osType, string runType)
+{
 
-		std::cerr << "workDir:" << workDir << "\n";
+	//
+	// (1) create "workdir.i " folder :need C++17 to use the files system namespace 
+	//
 
-		//
-		// (2) copy files from templatedir to workdir.i
-		//
+	string workDir = workingDirs + "/workdir." + std::to_string(i + 1);
 
-		const auto copyOptions =
-			std::filesystem::copy_options::update_existing
-			| std::filesystem::copy_options::recursive;
+	//std::cerr << "workDir:" + workDir + "\n";
 
-		/*
-	  const auto copyOptions = std::filesystem::copy_options::overwrite_existing;
-		*/
+	//
+	// (2) copy files from templatedir to workdir.i
+	//
 
-		try
-		{
-			std::filesystem::copy(copyDir, workDir, copyOptions);
+	const auto copyOptions =
+		std::filesystem::copy_options::update_existing
+		| std::filesystem::copy_options::recursive;
+
+	/*
+  const auto copyOptions = std::filesystem::copy_options::overwrite_existing;
+	*/
+
+	try
+	{
+		std::filesystem::copy(copyDir, workDir, copyOptions);
+	}
+	catch (std::exception & e)
+	{
+		std::cout << e.what() << "\n";
+	}
+
+
+	//std::filesystem::current_path(workDir); //======= Not good for parallel
+
+	/*
+	if (ok != true) {
+	  std::cerr << "my_nataf - could not copy files to " << workDir << "\n";
+	}
+	*/
+
+	//
+	// (3) write param.in file
+	//
+
+	string params = workDir + "/params.in";
+	std::ofstream writeFile(params.data());
+	if (writeFile.is_open()) {
+		writeFile << std::to_string(nrvcore) + "\n";
+		for (int j = 0; j < nrvcore; j++) {
+			writeFile << rvNames[j] + " ";
+			writeFile << std::to_string(xs[j]) + "\n";
 		}
-		catch (std::exception & e)
-		{
-			std::cout << e.what();
+		writeFile.close();
+	}
+
+	//
+	// (4) run workflow_driver.bat(e.g. It will make "SimCenterInput.tcl" and run OpenSees)
+	//
+
+	std::string workflowDriver = "workflow_driver";
+	if ((osType.compare("Windows") == 0) && (runType.compare("runningLocal") == 0))
+		workflowDriver = "workflow_driver.bat >nul 2>nul";
+
+	string workflowDriver_string = "cd " + workDir + " && " + workDir + "/" + workflowDriver;
+
+	const char* workflowDriver_char = workflowDriver_string.c_str();
+	system(workflowDriver_char);
+	if (i == 0) {
+		std::cout << workflowDriver_char << "\n\n";
+	}
+	//
+	// (5) get the values in "results.out"
+	//
+
+	string results = workDir + "/results.out";
+	std::ifstream readFile(results.data());
+
+	if (!readFile.is_open()) {
+		//*ERROR*
+		std::string errMsg = "Error running FEM: results.out missing in workdir." + std::to_string(i + 1) + ". Check your FEM inputs.";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
+
+	vector<double> g_tmp;
+	if (readFile.is_open()) {
+		int j = 0;
+		double g;
+		while (readFile >> g) {
+			g_tmp.push_back(g);
+			j++;
 		}
+		readFile.close();
 
-
-		std::filesystem::current_path(workDir);
-
-		/*
-		if (ok != true) {
-		  std::cerr << "my_nataf - could not copy files to " << workDir << "\n";
-		}
-		*/
-
-		//
-		// (3) write param.in file
-		//
-
-		string params = workDir + "/params.in";
-		std::ofstream writeFile(params.data());
-		if (writeFile.is_open()) {
-			writeFile << std::to_string(inp.nrv+ inp.nco + inp.nre) + "\n";
-			for (int j = 0; j < inp.nrv+inp.nco + inp.nre; j++) {
-				writeFile << inp.rvNames[j] + " ";
-				writeFile << std::to_string(x[i][j]) + "\n";
-			}
-			writeFile.close();
-		}
-
-		//
-		// (4) run workflow_driver.bat(e.g. It will make "SimCenterInput.tcl" and run OpenSees)
-		//
-
-		std::string workflowDriver = "workflow_driver";
-		if ((osType.compare("Windows") == 0) && (runType.compare("runningLocal") == 0))
-			workflowDriver = "workflow_driver.bat";
-
-		string workflowDriver_string = workDir + "/" + workflowDriver;
-
-		const char* workflowDriver_char = workflowDriver_string.c_str();
-		system(workflowDriver_char);
-
-		//
-		// (5) get the values in "results.out"
-		//
-
-		string results = workDir + "/results.out";
-		std::ifstream readFile(results.data());
-
-		if (!readFile.is_open()) {
-			//*ERROR*
-			std::string errMsg = "Error running FEM: results.out missing in workdir." + std::to_string(i + 1) + ". Check your FEM inputs.";
+		if (j == 0) {
+			std::string errMsg = "Error running FEM: results.out file at workdir." + std::to_string(i + 1) + " is empty.";
 			std::cout << errMsg << "\n";
 			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
 
-		vector<double> g_tmp;
-		if (readFile.is_open()) {
-			int j = 0;
-			double g;
-			while (readFile >> g) {
-				g_tmp.push_back(g);
-				j++;
-			}
-			readFile.close();
-
-			if (j == 0) {
-				std::string errMsg = "Error running FEM: results.out file at workdir." + std::to_string(i + 1) + " is empty.";
-				std::cout << errMsg << "\n";
-				theErrorFile << errMsg << std::endl;
-				theErrorFile.close();
-				exit(-1);
-			}
-
-			if (j != inp.nqoi) {
-				//*ERROR*
-				std::string errMsg = "Error reading FEM results: the number of outputs in results.out (" + std::to_string(j) + ") does not match the number of QoIs specified (" + std::to_string(inp.nqoi) + ")";
-				std::cout << errMsg << "\n";
-				theErrorFile << errMsg << std::endl;
-				theErrorFile.close();
-				exit(-1);
-			}
+		if (j != nqoi) {
+			//*ERROR*
+			std::string errMsg = "Error reading FEM results: the number of outputs in results.out (" + std::to_string(j) + ") does not match the number of QoIs specified (" + std::to_string(nqoi) + ")";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
+			theErrorFile.close();
+			exit(-1);
 		}
-
-		gval.push_back(g_tmp);
-
 	}
 
-
+	return g_tmp;
 }
-
 
 
 void ERANataf::simulateAppSequential(string osType, string runType, jsonInput inp, vector<vector<double>> u, vector<vector<double>>& xval, vector<vector<double>>& gval, int idx)
@@ -650,8 +671,8 @@ void ERANataf::simulateAppSequential(string osType, string runType, jsonInput in
 
 	std::string copyDir = inp.workDir + "/templatedir";
 
-	std::cerr << "workdir:" << inp.workDir << "\n";
-	std::cerr << "copyDir:" << copyDir << "\n";
+	//std::cerr << "workdir:" + inp.workDir + "\n";
+	std::cerr << "copyDir:" + copyDir + "\n";
 	
 	//
 	// (1) create "workdir.idx " folder :need C++17 to use the files system namespace 
@@ -659,7 +680,7 @@ void ERANataf::simulateAppSequential(string osType, string runType, jsonInput in
 
 	string workDir = inp.workDir + "/workdir." + std::to_string(idx + 1);
 
-	std::cerr << "workDir:" << workDir << "\n";
+	std::cerr << "workDir:" + workDir + "\n";
 
 	//
 	// (2) copy files from templatedir to workdir.idx

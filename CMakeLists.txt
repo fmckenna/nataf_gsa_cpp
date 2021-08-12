@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project(nataf_gsa_project)
 
+
+# sy- add openmp
+find_package(OpenMP)
+
+
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -34,7 +40,8 @@ target_link_libraries(nataf_gsa
 	CONAN_PKG::boost
 	CONAN_PKG::jsonformoderncpp	
 	CONAN_PKG::nlopt
-	CONAN_PKG::mkl-static)
+	CONAN_PKG::mkl-static
+	OpenMP::OpenMP_CXX)
 
 #target_link_libraries(nataf_gsa
 #	CONAN_PKG::boost

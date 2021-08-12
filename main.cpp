@@ -2,6 +2,7 @@
 #include <fstream>
 #include <random>
 #include <iomanip>
+#include <chrono>
 
 #include "jsonInput.h"
 #include "ERADist.h"
@@ -28,6 +29,10 @@ int main(int argc, char** argv)
 	std::cout << "WORKDIR: " << workDir << "\n";
 	std::cout << "OS: " << osType << "\n";
 	std::cout << "RUN: " << runType << "\n";
+	std::cout << "\n";
+	
+	auto start = std::chrono::high_resolution_clock::now();
+
 
 	theErrorFile.open(workDir+"/dakota.err",'w');
 	std::string errMsg;
@@ -67,11 +72,7 @@ int main(int argc, char** argv)
 			uvals[ns][nr] = distribution(generator);
 	}
 
-	std::cout<<std::to_string(inp.nreg)<<std::endl;
-	std::cout<<std::to_string(nreg);
-
 	vector<vector<int>> resampIDs(nmc, vector<int>(nreg, 0.0));
-
 	for (int nr = 0; nr < nreg; nr++) // if {0,1},{2,3}, nrg is 2
 	{
 		if (nmc > inp.resamplingSize[nr])	{ 
@@ -97,10 +98,9 @@ int main(int argc, char** argv)
 	//
 	//	(4-1) FE Analysis - (batch samples)
 	//
-	
-	vector<vector<double>> gvals, xvals;
+	vector<vector<double>> gvals;
+	vector<vector<double>> xvals;
 	T.simulateAppBatch(osType, runType, inp, uvals, resampIDs, xvals, gvals);
-
 
 	//
 	//	(3-2) and (4-2) alternative (sequential)
@@ -136,8 +136,11 @@ int main(int argc, char** argv)
 		//
 		//	Write  dakota.out
 		//
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 
-		GsaResults.writeOutputs(inp);
+		GsaResults.writeOutputs(inp, elapsed.count());
 	}
 	else if (!inp.uqType.compare("Forward Propagation")) {
 
@@ -151,7 +154,6 @@ int main(int argc, char** argv)
 
 	}
 
-	
 	return 0;
 
 }

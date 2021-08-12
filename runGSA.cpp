@@ -323,7 +323,7 @@ double runGSA::writeTabOutputs(jsonInput inp)
 
 }
 
-double runGSA::writeOutputs(jsonInput inp)
+double runGSA::writeOutputs(jsonInput inp, double dur)
 {
 	// dakota.out
 	string writingloc = inp.workDir + "/dakota.out";
@@ -383,6 +383,10 @@ double runGSA::writeOutputs(jsonInput inp)
 
 	outfile << "* number of samples" << std::endl;
 	outfile << inp.nmc << std::endl;
+
+	outfile << "* elapsed time:" << std::endl;
+	outfile << dur << " s" << std::endl;
+
 	outfile.close();
 
 	theErrorFile.close();

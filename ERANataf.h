@@ -40,6 +40,15 @@ public:
 						vector<vector<double>>& xvals,
 						vector<vector<double>>& gvals,
 						int idx);
+	vector<double> simulateAppOnce(int i,
+						string workingDirs,
+						string copyDir,
+						int nrvcore,
+						int qoi,
+						vector<string> rvNames,
+						vector<double> xs,
+						string osType,
+						string runType);
 
 private:
 	const double PI = 3.1415926535897932384626433;

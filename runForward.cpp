@@ -6,13 +6,13 @@ runForward::runForward() {}
 
 runForward::runForward(vector<vector<double>> xval,	vector<vector<double>> gmat)
 {
-	std::cout << std::string("============================FLAG+=============================") << std::endl;
 
 	this->xval = xval;
 	this->gval = gmat;
 	nmc = xval.size();
 	nrv = xval[0].size();
 
+	std::cout << "RV     Mean    StdDev  Skewness  Kurtosis" << std::endl;
 	for (int nr = 0; nr < nrv; nr++) {
 		vector<double> xvec;
 		for (int ns = 0; ns < nmc; ns++) {
@@ -24,10 +24,8 @@ runForward::runForward(vector<vector<double>> xval,	vector<vector<double>> gmat)
 		double skewness_val = calSkewness(xvec, mean_val, stdDev_val);
 		double kurtosis_val = calKurtosis(xvec, mean_val, stdDev_val);
 
-		std::cout << mean_val << std::endl;
-		std::cout << stdDev_val << std::endl;
-		std::cout << skewness_val << std::endl;
-		std::cout << kurtosis_val << std::endl;
+		std::cout << "RV " << nr << ": ";
+		std::cout << mean_val << " " << stdDev_val << " " << skewness_val << " " << kurtosis_val << std::endl;
 
 		mean.push_back(mean_val);
 		stdDev.push_back(stdDev_val);
