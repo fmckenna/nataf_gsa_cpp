@@ -7,6 +7,7 @@
 # Executables
 *.exe
 
+x64
 Debug
 Release
 .vs
@@ -17,3 +18,10 @@ build
 # Libraries
 *.lib
 *.dll
+
+#
+*.user
+*.vcxproj
+*.sln
+
+.vs
