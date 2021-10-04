@@ -18,9 +18,23 @@ void writeOutputs(jsonInput inp, vector<vector<double>> xvals, vector<vector<dou
 int main(int argc, char** argv)
 //int main(void)
 { 
+	std::string errMsg;
+
+	if (argc != 4) {
+
+		errMsg = "Number of the addition commend line arguments is " + std::to_string(argc-1) + ", but 3 is required. The arguments should always include the working directory / os type / run type";
+		std::cout << errMsg << "\n";
+		// theErrorFile << errMsg << std::endl;
+		// theErrorFile.close();
+		// exit(-1);
+	}
+
 	std::string workDir = argv[1];
 	std::string osType = argv[2];
 	std::string runType = argv[3];
+
+
+
 
 	//std::string workDir = "C:/Users/yisan/Documents/quoFEM/LocalWorkDir/tmp.SimCenter";
 	//std::string osType = "Windows";
@@ -35,7 +49,6 @@ int main(int argc, char** argv)
 
 
 	theErrorFile.open(workDir+"/dakota.err",'w');
-	std::string errMsg;
 	if (!theErrorFile.is_open()) {
 		errMsg = "Error running UQ engine: Failed to creat Dakota.err at " + workDir;
 		std::cout << errMsg << "\n";

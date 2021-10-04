@@ -9,6 +9,8 @@
 #include <vector>
 #include <string>
 #include <regex>
+
+#include <filesystem>
 extern std::ofstream theErrorFile; // Error log
 
 using json = nlohmann::json;
