@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project(nataf_gsa_project)
 
+
+# sy- add openmp
+find_package(OpenMP)
+
+
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -28,22 +34,32 @@ set(SOURCES main.cpp
 	    discreteDist.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib_armadillo/armadillo-10.1.0/include)
-include_directories(/usr/local/Cellar/boost/1.75.0_3/include/)
 
 add_executable(nataf_gsa ${SOURCES})
+
+if(OpenMP_CXX_FOUND)
+
 target_link_libraries(nataf_gsa
+	CONAN_PKG::boost
 	CONAN_PKG::jsonformoderncpp	
 	CONAN_PKG::nlopt
+	CONAN_PKG::eigen
+	CONAN_PKG::mkl-static
+	OpenMP::OpenMP_CXX)
+
+else()
+
+target_link_libraries(nataf_gsa
+	CONAN_PKG::boost
+	CONAN_PKG::jsonformoderncpp	
+	CONAN_PKG::nlopt
+	CONAN_PKG::eigen
 	CONAN_PKG::mkl-static)
 
-#target_link_libraries(nataf_gsa
-#	CONAN_PKG::boost
-#	CONAN_PKG::jsonformoderncpp	
-#	CONAN_PKG::nlopt
-#	CONAN_PKG::mkl-static
-#	CONAN_PKG::eigen)
+endif()
 
 install(TARGETS nataf_gsa DESTINATION bin)
 
-add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
+#add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
+add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
 

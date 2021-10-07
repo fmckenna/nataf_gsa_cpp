@@ -27,7 +27,9 @@ public:
 			vector<vector<int>> combs_tmp,
 			int Kos);
 	~runGSA();
-	double writeOutputs(jsonInput inp);
+	double writeOutputs(jsonInput inp, double dur);
+	double writeTabOutputs(jsonInput inp);
+
 
 	//vector<double> Si;
 

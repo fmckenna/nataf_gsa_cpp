@@ -23,6 +23,7 @@ public:
 			vector<vector<double>> gval);
 	~runForward();
 	double writeOutputs(jsonInput inp);
+	double writeTabOutputs(jsonInput inp);
 
 	//vector<double> Si;
 

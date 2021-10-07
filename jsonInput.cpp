@@ -6,7 +6,9 @@ jsonInput::jsonInput(string workDir)
 	this->workDir = workDir;
 	std::ifstream myfile(workDir + "/templatedir/dakota.json");
 	if (!myfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to open JSON";
+		std::string errMsg = "Error running UQ engine: Unable to open JSON";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
@@ -14,21 +16,32 @@ jsonInput::jsonInput(string workDir)
 	json UQjson = json::parse(myfile, nullptr, false);
 	if (UQjson.is_discarded())
 	{
-		theErrorFile << "Error reading json: JSON syntax is broken" << std::endl;
+		std::string errMsg = "Error reading json: JSON syntax is broken";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
 
 	//json UQjson = json::parse(myfile);
 
-	// 
-	// Get variables
-	// 
+	uqType = UQjson["UQ_Method"]["uqType"];
+
+	if ((uqType.compare("Forward Propagation") == 0) || (uqType.compare("Sensitivity Analysis") == 0)) {
+		// pass
+	} else
+	{
+		//*ERROR*
+		std::string errMsg = "Error reading json: 'Forward Analysis' or 'Sensitivity Analysis' backend is called, but the user requested " + UQjson["UQ_Method"]["uqType"];
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
+		theErrorFile.close();
+		exit(-1);
+	}
 
 	nmc = UQjson["UQ_Method"]["samplingMethodData"]["samples"];
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQmethod = UQjson["UQ_Method"]["samplingMethodData"]["method"];
-	uqType = UQjson["UQ_Method"]["uqType"];
 	//
 	// Specify parameters in each distributions.
 	//
@@ -44,6 +57,7 @@ jsonInput::jsonInput(string workDir)
 	if (UQjson["UQ_Method"].find("RVdataGroup") != UQjson["UQ_Method"].end()) {
 		// if the key "sensitivityGroups" exists
 		resampGroupTxt = UQjson["UQ_Method"]["RVdataGroup"];
+		resampGroupTxt.erase(remove(resampGroupTxt.begin(), resampGroupTxt.end(), ' '), resampGroupTxt.end());
 	} else {
 		resampGroupTxt = "";
 	}
@@ -57,9 +71,12 @@ jsonInput::jsonInput(string workDir)
 	bool isUnique = (it == flattenResamplingGroups.end());
 	if (!isUnique) {
 		//*ERROR*
-		theErrorFile << "Error reading input: groups of random variables should be mutually exclusive" << std::endl;
+		std::string errMsg = "Error reading input: groups of random variables should be mutually exclusive";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
+
 	}
 
 	for (auto& elem : UQjson["randomVariables"])
@@ -67,11 +84,13 @@ jsonInput::jsonInput(string workDir)
 		if (elem.find("inputType") == elem.end())
 		{
 			//*ERROR*
-			theErrorFile << "Error reading json: input file does not have the key 'inputType'" << std::endl;
+			std::string errMsg = "Error reading json: input file does not have the key 'inputType'";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
-			// if key "correlationMatrix" exists
+		// if key "correlationMatrix" exists
 		
 		// name of distribution
 		std::string distName = elem["distribution"];
@@ -89,22 +108,6 @@ jsonInput::jsonInput(string workDir)
 		std::vector<std::string> pnames;
 		getPnames(distName, inpTypeSub, pnames);
 
-
-		if (distName.compare("constant") == 0) {
-			constIdx.push_back(count);
-			nco++;
-			count++;
-			continue;
-		}
-		if ((distName.compare("discrete") == 0) && (inpTypeSub.compare("PAR")) == 0) {
-			if (elem[pnames[0]].size() == 1) {
-				// discrete distribution with only one quantity = constant
-				constIdx.push_back(count);
-				nco++;
-				count++;
-				continue;
-			}
-		}
 		if (std::find(flattenResamplingGroups.begin(), flattenResamplingGroups.end(), elem["name"]) != flattenResamplingGroups.end()) {
 			//is_resamplingGroup
 			if (!(distName.compare("discrete") == 0) || !(inpTypeSub.compare("DAT")) == 0) {
@@ -119,9 +122,27 @@ jsonInput::jsonInput(string workDir)
 				else {
 					InputType = "Moments";
 				}
-				theErrorFile << "Error reading input: RVs specified in UQ tab should have the option <Dataset-Discrete>. Your input is <" << InputType << "-" << distName << ">" << std::endl;
+				std::string errMsg = "Error reading input: RVs specified in UQ tab should have the option <Dataset-Discrete>. Your input is <" + InputType + "-" + distName + ">";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
+			}
+
+			if (distName.compare("constant") == 0) {
+				constIdx.push_back(count);
+				nco++;
+				count++;
+				continue;
+			}
+			if ((distName.compare("discrete") == 0) && (inpTypeSub.compare("PAR")) == 0) {
+				if (elem[pnames[0]].size() == 1) {
+					// discrete distribution with only one quantity = constant
+					constIdx.push_back(count);
+					nco++;
+					count++;
+					continue;
+				}
 			}
 
 				// discrete distribution with only one quantity = constant
@@ -139,11 +160,20 @@ jsonInput::jsonInput(string workDir)
 		if (opts[nrv].compare("DAT") == 0) {
 
 			// Sample set inside vals
-			std::string directory = elem["dataDir"];
+			//std::string directory = elem["dataDir"];
+			//std::string tmpName = elem["name"];
+			//std::string directory = ".\\templatedir\\"+ tmpName +".in";
+
+			std::string tmpName = elem["name"];
+			std::filesystem::path dir = workDir;
+			std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+			std::filesystem::path directory = dir / relPath;
 			std::ifstream data_table(directory);
 			if (!data_table.is_open()) {
 				//*ERROR*
-				theErrorFile << "Error reading json: cannot open data file at " << directory << std::endl;
+				std::string errMsg = "Error reading json: cannot open data file " + directory.u8string();
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}
@@ -163,7 +193,10 @@ jsonInput::jsonInput(string workDir)
 			if (vals_tmp.size() < 1) { //*ERROR*
 				int a = vals_tmp.size();
 				std::cout << a << std::endl;
-				theErrorFile << "Error reading json: data file of " << rvNames[nrv] << " has less then one sample." << std::endl;
+
+				std::string errMsg = "Error reading json: data file of " + rvNames[nrv] + " has less then one sample.";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}
@@ -207,7 +240,9 @@ jsonInput::jsonInput(string workDir)
 					}
 					else
 					{
-						theErrorFile << "Error reading json: cannot find <" << pn << "> in " << distName << " from input json." << std::endl;
+						std::string errMsg = "Error reading json: cannot find <" + pn + "> in " + distName + " from input json.";
+						std::cout << errMsg << "\n";
+						theErrorFile << errMsg << std::endl;
 						theErrorFile.close();
 						exit(-1);
 					}
@@ -233,11 +268,17 @@ jsonInput::jsonInput(string workDir)
 		auto elem = UQjson["randomVariables"][i];
 
 		// Sample set inside vals
-		std::string directory = elem["dataDir"];
+		//std::string directory = elem["dataDir"];
+		std::string tmpName = elem["name"];
+		std::filesystem::path dir = workDir;
+		std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+		std::filesystem::path directory = dir / relPath;
 		std::ifstream data_table(directory);
 		if (!data_table.is_open()) {
 			//*ERROR*
-			theErrorFile << "Error reading json: cannot open data file at " << directory << std::endl;
+			std::string errMsg = "Error reading json: cannot open data file: " + directory.u8string();
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
 		}
@@ -255,9 +296,14 @@ jsonInput::jsonInput(string workDir)
 		if (vals_tmp.size() < 1) { //*ERROR*
 			int a = vals_tmp.size();
 			std::cout << a << std::endl;
-			theErrorFile << "Error reading json: data file of " << rvNames[nrv] << " has less then one sample." << std::endl;
+
+			//*ERROR*
+			std::string errMsg = "Error reading json: data file of " + rvNames[nrv] + " has less then one sample.";
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
+
 		}
 
 		vals.push_back(vals_tmp);
@@ -313,8 +359,16 @@ jsonInput::jsonInput(string workDir)
 	nqoi = 0;
 	for (auto& elem : UQjson["EDP"]) {
 		// *name of distribution
-		qoiNames.push_back(elem["name"]);
-		nqoi++;
+		if (elem["length"] == 1) {
+			qoiNames.push_back(elem["name"]);
+			nqoi++;
+		} else if (elem["length"] > 1) {
+			std::string name = elem["name"];
+			for (int j=0; j < elem["length"]; j++) {
+				qoiNames.push_back(name + "_" + std::to_string(j+1));
+				nqoi++;
+			}
+		}
 	}
 
 	//
@@ -352,6 +406,13 @@ jsonInput::jsonInput(string workDir)
 //}
 	}
 
+
+	//
+	// get resampling group index matrix
+	//
+
+	fromTextToId(resampGroupTxt, rvNames, resamplingGroups);
+
 	//
 	// get group index matrix
 	//
@@ -360,45 +421,39 @@ jsonInput::jsonInput(string workDir)
 		// if the key "sensitivityGroups" exists
 
 		std::string groupTxt = UQjson["UQ_Method"]["sensitivityGroups"];
+		groupTxt.erase(remove(groupTxt.begin(), groupTxt.end(), ' '), groupTxt.end()); // remove any white spaces
 		fromTextToId(groupTxt, rvNames, groups);
 	}
 	else {
 		for (int i = 0; i < nrv; i++) {
 			groups.push_back({i});
 		}
+		std::cout << nreg <<std::endl;
+		for (int i = 0; i < nreg; i++) {
+			for (int j = 0; j < size(resamplingGroups[i]); j++) {
+				groups.push_back({ resamplingGroups[i][j] });
+			}
+		}
+
 	}
 	ngr = groups.size();
 
 
 
-	//
-	// get resampling group index matrix
-	//
-
-	fromTextToId(resampGroupTxt, rvNames, resamplingGroups);
-
 	for (int i = 0; i < nreg; i++) {
 		int length_old = size(vals[resamplingGroups[i][0]]);
 		int length_data;
 		for (int j = 1; j < size(resamplingGroups[i]); j++) {
-			std::cout << resamplingGroups[i][j] << std::endl;
-			std::cout << size(vals) << std::endl;
-			std::cout << (rvNames[0]) << std::endl;
-			std::cout << rvNames[1] << std::endl;
-			std::cout << rvNames[2] << std::endl;
-			std::cout << rvNames[3] << std::endl;
-
-			std::cout << vals[resamplingGroups[i][j]][0] << std::endl;
-
 			length_data = size(vals[resamplingGroups[i][j]]);
 			if (length_data != length_old)
 			{
-				theErrorFile << "Error reading json: RVs in the same group do not have the same number of samples" << std::endl;
+				std::string errMsg = "Error reading json: RVs in the same group do not have the same number of samples";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
 			}
 			length_old = length_data;
-			std::cout<< size(vals[resamplingGroups[i][j]]) <<std::endl;
 		}
 		resamplingSize.push_back(length_data);
 	}
@@ -425,19 +480,23 @@ jsonInput::fromTextToId(string groupTxt, vector<string>& groupPool, vector<vecto
 			if (itr != groupPool.cend()) { // from names (a,b,{a,b}) to idx's (1,2,{1,2})		
 				int index_rvn = std::distance(groupPool.begin(), itr); // start from 0
 				groupID.push_back((int)index_rvn);
+				std::string errMsg;
 				if (index_rvn >= nrv) {
-					// If it is a constant variable
-					theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable: ";
-					theErrorFile << groupPool[index_rvn] << std::endl;
+					std::string errMsg = "Error reading json: RV group (for Sobol) cannot contain constant variable: " + groupPool[index_rvn]  ;
+					std::cout << errMsg << "\n";
+					theErrorFile << errMsg << std::endl;
 					theErrorFile.close();
 					exit(-1);
 				}
 			}
 			else {
 				// *ERROR*
-				theErrorFile << "Error reading json: element <" << substr << "> inside the variable groups not found." << std::endl;
+				std::string errMsg = "Error reading json: element <" + substr + "> inside the variable groups not found.";
+				std::cout << errMsg << "\n";
+				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
 				exit(-1);
+
 			}
 		}
 		groupIdVect.push_back(groupID);
@@ -557,10 +616,11 @@ jsonInput::getPnames(string distname, string optname, vector<std::string>& par_c
 			par_char.push_back("value");
 		}
 		else {
-			theErrorFile << "Error reading json: cannot interpret distribution name: " << distname;
+			std::string errMsg = "Error reading json: cannot interpret distribution name: " + distname;
+			std::cout << errMsg << "\n";
+			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();
 			exit(-1);
-			// NA
 		}
 	}
 	else if (optname.compare("MOM") == 0) { // Get Moments
@@ -634,7 +694,9 @@ jsonInput::getPnames(string distname, string optname, vector<std::string>& par_c
 		}
 	}
 	else {
-		theErrorFile << "Error reading json: input type should be one of PAR/MOM/DAT";
+		std::string errMsg = "Error reading json: input type should be one of PAR/MOM/DAT";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}

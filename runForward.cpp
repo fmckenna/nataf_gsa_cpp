@@ -6,13 +6,13 @@ runForward::runForward() {}
 
 runForward::runForward(vector<vector<double>> xval,	vector<vector<double>> gmat)
 {
-	std::cout << std::string("============================FLAG+=============================") << std::endl;
 
 	this->xval = xval;
 	this->gval = gmat;
 	nmc = xval.size();
 	nrv = xval[0].size();
 
+	std::cout << "RV     Mean    StdDev  Skewness  Kurtosis" << std::endl;
 	for (int nr = 0; nr < nrv; nr++) {
 		vector<double> xvec;
 		for (int ns = 0; ns < nmc; ns++) {
@@ -24,10 +24,8 @@ runForward::runForward(vector<vector<double>> xval,	vector<vector<double>> gmat)
 		double skewness_val = calSkewness(xvec, mean_val, stdDev_val);
 		double kurtosis_val = calKurtosis(xvec, mean_val, stdDev_val);
 
-		std::cout << mean_val << std::endl;
-		std::cout << stdDev_val << std::endl;
-		std::cout << skewness_val << std::endl;
-		std::cout << kurtosis_val << std::endl;
+		std::cout << "RV " << nr << ": ";
+		std::cout << mean_val << " " << stdDev_val << " " << skewness_val << " " << kurtosis_val << std::endl;
 
 		mean.push_back(mean_val);
 		stdDev.push_back(stdDev_val);
@@ -75,9 +73,13 @@ double runForward::writeOutputs(jsonInput inp)
 
 
 	if (!outfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakota.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakota.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
+
 	}
 
 
@@ -138,12 +140,22 @@ double runForward::writeOutputs(jsonInput inp)
 	//outfile << inp.nmc << std::endl;
 	//outfile.close();
 
+	theErrorFile.close();
+
+}
+
+
+double runForward::writeTabOutputs(jsonInput inp)
+{
 	// dakotaTab.out
 	std::string writingloc1 = inp.workDir + "/dakotaTab.out";
 	std::ofstream Taboutfile(writingloc1);
 
 	if (!Taboutfile.is_open()) {
-		theErrorFile << "Error running UQ engine: Unable to write dakotaTab.out";
+
+		std::string errMsg = "Error running UQ engine: Unable to write dakota.out";
+		std::cout << errMsg << "\n";
+		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
 		exit(-1);
 	}
@@ -171,7 +183,5 @@ double runForward::writeOutputs(jsonInput inp)
 		}
 		Taboutfile << std::endl;
 	}
-
-	theErrorFile.close();
 
 }
