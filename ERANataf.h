@@ -6,7 +6,6 @@ using std::string;
 using std::vector;
 #include "lib_eigen/Eigen/Dense"
 
-
 extern std::ofstream theErrorFile; // Error log
 
 class ERANataf

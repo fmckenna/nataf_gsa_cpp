@@ -4,9 +4,16 @@ project(nataf_gsa_project)
 
 
 # sy- add openmp
-find_package(OpenMP)
 
+find_package(OpenMP REQUIRED) # Find the package
+#find_package(MPI)
 
+#if (APPLE)
+#	#SET(CMAKE_C_COMPILER /usr/bin/gcc-11)
+#	#SET(CMAKE_CXX_COMPILER /usr/bin/g++)
+#	SET(CMAKE_C_COMPILER /usr/local/bin/gcc-11)
+#	SET(CMAKE_CXX_COMPILER /usr/local/bin/g++-11)
+#endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -29,7 +36,7 @@ set(SOURCES main.cpp
 	    jsonInput.cpp
 	    uniformDist.cpp
 	    chiSquaredDist.cpp
-	    lognormalDIst.cpp
+	    lognormalDist.cpp
 	    weibullDist.cpp
 	    discreteDist.cpp)
 
@@ -41,6 +48,7 @@ target_link_libraries(nataf_gsa
 	CONAN_PKG::jsonformoderncpp	
 	CONAN_PKG::nlopt
 	CONAN_PKG::mkl-static
+	CONAN_PKG::ms-gsl
 	OpenMP::OpenMP_CXX)
 
 #target_link_libraries(nataf_gsa

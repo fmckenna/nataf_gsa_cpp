@@ -17,3 +17,8 @@ build
 # Libraries
 *.lib
 *.dll
+
+.DS_Store
+.idea/
+cmake-build-debug
+maybenotused

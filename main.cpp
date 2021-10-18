@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	auto start = std::chrono::high_resolution_clock::now();
 
 
-	theErrorFile.open(workDir+"/dakota.err",'w');
+	theErrorFile.open((workDir+"/dakota.err").c_str(),std::ofstream::out );
 	std::string errMsg;
 	if (!theErrorFile.is_open()) {
 		errMsg = "Error running UQ engine: Failed to creat Dakota.err at " + workDir;
