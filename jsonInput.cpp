@@ -160,11 +160,18 @@ jsonInput::jsonInput(string workDir)
 		if (opts[nrv].compare("DAT") == 0) {
 
 			// Sample set inside vals
-			std::string directory = elem["dataDir"];
+			//std::string directory = elem["dataDir"];
+			//std::string tmpName = elem["name"];
+			//std::string directory = ".\\templatedir\\"+ tmpName +".in";
+
+			std::string tmpName = elem["name"];
+			std::filesystem::path dir = workDir;
+			std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+			std::filesystem::path directory = dir / relPath;
 			std::ifstream data_table(directory);
 			if (!data_table.is_open()) {
 				//*ERROR*
-				std::string errMsg = "Error reading json: cannot open data file at " + directory;
+				std::string errMsg = "Error reading json: cannot open data file " + directory.u8string();
 				std::cout << errMsg << "\n";
 				theErrorFile << errMsg << std::endl;
 				theErrorFile.close();
@@ -261,11 +268,15 @@ jsonInput::jsonInput(string workDir)
 		auto elem = UQjson["randomVariables"][i];
 
 		// Sample set inside vals
-		std::string directory = elem["dataDir"];
+		//std::string directory = elem["dataDir"];
+		std::string tmpName = elem["name"];
+		std::filesystem::path dir = workDir;
+		std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+		std::filesystem::path directory = dir / relPath;
 		std::ifstream data_table(directory);
 		if (!data_table.is_open()) {
 			//*ERROR*
-			std::string errMsg = "Error reading json: cannot open data file at " + directory;
+			std::string errMsg = "Error reading json: cannot open data file: " + directory.u8string();
 			std::cout << errMsg << "\n";
 			theErrorFile << errMsg << std::endl;
 			theErrorFile.close();

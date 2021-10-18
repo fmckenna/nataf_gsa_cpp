@@ -47,6 +47,7 @@ target_link_libraries(nataf_gsa
 	CONAN_PKG::boost
 	CONAN_PKG::jsonformoderncpp	
 	CONAN_PKG::nlopt
+	CONAN_PKG::eigen
 	CONAN_PKG::mkl-static
 	CONAN_PKG::ms-gsl
 	OpenMP::OpenMP_CXX)
@@ -60,5 +61,6 @@ target_link_libraries(nataf_gsa
 
 install(TARGETS nataf_gsa DESTINATION bin)
 
-add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
+#add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
+add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
 
