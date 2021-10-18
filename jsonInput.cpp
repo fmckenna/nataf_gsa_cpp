@@ -166,7 +166,8 @@ jsonInput::jsonInput(string workDir)
 
 			std::string tmpName = elem["name"];
 			std::filesystem::path dir = workDir;
-			std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+			//std::filesystem::path relPath = "templatedir\\" + tmpName + ".in";
+			std::filesystem::path relPath = std::filesystem::path("templatedir") / std::filesystem::path(tmpName+ ".in") ;
 			std::filesystem::path directory = dir / relPath;
 			std::ifstream data_table(directory);
 			if (!data_table.is_open()) {
