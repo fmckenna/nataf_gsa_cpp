@@ -7,7 +7,6 @@
 # Executables
 *.exe
 
-x64
 Debug
 Release
 .vs
@@ -19,9 +18,7 @@ build
 *.lib
 *.dll
 
-#
-*.user
-*.vcxproj
-*.sln
-
-.vs
+.DS_Store
+.idea/
+cmake-build-debug
+Maybenotused

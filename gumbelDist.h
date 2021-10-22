@@ -32,3 +32,11 @@ private:
 	void checkParams();
 
 };
+
+struct funcdouble
+{
+    double operator()(double const& x)
+    { //
+        return (x + 3) * (x - 1) * (x - 1); // (x + 3)(x - 1)^2
+    }
+};

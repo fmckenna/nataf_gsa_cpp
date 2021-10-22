@@ -91,10 +91,10 @@ gumbelDist::gumbelDist(string opt, vector<double> val, vector<double> add)
 		double lb[2] = { 1.e-10 , -INFINITY };
 		nlopt_opt optim = nlopt_create(NLOPT_LN_COBYLA, np); // derivative-free algorithm
 		nlopt_set_lower_bounds(optim, lb);
-		
+
 		nlopt_set_min_objective(optim, nnlGumb, &xs);
 		nlopt_set_xtol_rel(optim, 1e-6);
-		double minf; // `*`the` `minimum` `objective` `value,` `upon` `return`*` 
+		double minf; // `*`the` `minimum` `objective` `value,` `upon` `return`*`
 
 		//double params;
 		if (nlopt_optimize(optim, params, &minf) < 0) {
