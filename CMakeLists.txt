@@ -54,5 +54,5 @@ target_link_libraries(nataf_gsa
 install(TARGETS nataf_gsa DESTINATION bin)
 
 #add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
-add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
+#add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
 
