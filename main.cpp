@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 		//
 		//	(5) Global sensitivity analysis
 		//
-		int Kos = 25;
+		int Kos = 1;
 		runGSA GsaResults(xvals, gvals, inp.groups, Kos);
 		//
 		//	Write  dakota.out

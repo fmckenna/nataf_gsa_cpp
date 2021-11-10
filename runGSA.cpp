@@ -17,7 +17,7 @@ runGSA::runGSA(vector<vector<double>> xval,
 	nrv = xval[0].size();
 	ncombs = combs_tmp.size(); 
 	int nqoi = gmat[0].size();
-	Kos = std::min(Kos, int(nmc / 5));
+	Kos = std::min(Kos, int(nmc / 20));
 
 	// for each QoI
 	for (int j = 0; j < nqoi; j++) {
@@ -54,31 +54,33 @@ runGSA::runGSA(vector<vector<double>> xval,
 
 
 		// repeat GSA with different Kos untill success
-		double failIdx = -100, i = 1;
-		while ((failIdx == -100) || (Kos/i < 0.5))
-		{
-			Sij = doGSA(gvec, ceil(Kos/i),'M');
-			failIdx = Sij[0];
-			i *=2;
-		}
+		//double failIdx = -100, i = 1;
+		//while ((failIdx == -100) || (Kos/i < 0.5))
+		//{
+		//	Sij = doGSA(gvec, ceil(Kos/i),'M');
+		//	failIdx = Sij[0];
+		//	i *=2;
+		//}
 
-		failIdx = -100, i = 1;
-		while ((failIdx == -100) || (Kos / i < 0.5))
-		{
-			Stj = doGSA(gvec, ceil(Kos/i), 'T');
-			failIdx = Stj[0];
-			i *= 2;
-		}
+		//failIdx = -100, i = 1;
+		//while ((failIdx == -100) || (Kos / i < 0.5))
+		//{
+		//	Stj = doGSA(gvec, ceil(Kos/i), 'T');
+		//	failIdx = Stj[0];
+		//	i *= 2;
+		//}
+		Sij = doGSA(gvec, Kos, 'M');
+		Stj = doGSA(gvec, Kos, 'T');
 
 		vector<double> Si_temp, Kos,St_temp;
 
 
-		Simat.push_back(Stj);
-		Stmat.push_back(Sij);
+		Simat.push_back(Sij);
+		Stmat.push_back(Stj);
 	}
 }
 
-vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
+vector<double> runGSA::doGSA(vector<double> gval,int Ko,char Opt)
 {
 	vector<vector<int>> combs;
 
@@ -107,6 +109,7 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 
 	for (int nc = 0; nc < ncombs; nc++)
 	{
+		int Kos = Ko;
 
 		const int endm = combs[nc].size(); // (nx+ng)-1
 		const int endx = endm - 1;			// (nx)-1
@@ -165,8 +168,23 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 		}
 
 		gmm_full model;
-		bool status = model.learn(data, Kos, maha_dist, static_subset, 30, 100, V *1.e-3, false);
+		double oldLogL = -INFINITY, logL;
+		bool status;
+		while (1) {
+			status = model.learn(data, Kos, maha_dist, static_subset, 500, 500, V * 1.e-15, false);// max kmeans iter = 100, max EM iter = 200, convergence variance = V*1.e-15
+			logL = model.sum_log_p(data);
+			if ((logL < oldLogL) || (Kos >= nmc/5)) {
+				break;
+			} else {
+				oldLogL = logL;
+				Kos = Kos + 1;
+				printf("increasing Ko to %i, ll=%.f3\n", Kos, logL);
+			}
+		}
+		printf("FINAL Ko = %i \n", Kos);
 
+
+		
 		if (status == false)
 		{
 			std::string errMsg = "Error running UQ engine: GSA learning failed";
@@ -189,6 +207,28 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 		cube cov = model.fcovs; //nrv x nrv x Ko
 		rowvec pi = model.hefts;   //1 x Ko 
 		rowvec mug = mu.row(endm);    //1 x Ko
+
+		/*
+		for (int k = 0; k < Kos; k++)
+		{
+			for (int i=0;i< endm+1;i++){
+				for (int j = 0; j < endm+1; j++) {
+						mat tmp = cov.slice(k);
+						printf("%.3f ", tmp(i,j));
+				}
+				printf("\n ");
+			}
+			printf("\n ");
+		}
+		for (int k = 0; k < Kos; k++)
+		{
+			for (int i = 0; i < endm + 1; i++) 
+			{
+				printf("%.3f ", mu(i,k));
+			}
+			printf("\n ");
+		}
+		*/
 
 		vector<double> mui;
 		mui.reserve(nmc);
@@ -226,19 +266,31 @@ vector<double> runGSA::doGSA(vector<double> gval,int Kos,char Opt)
 			mui.push_back(tmp(0, 0));
 		}
 
+
+		double var1 = 0, var2 = 0;
+		for (int k = 0; k < Kos; k++)
+		{
+			mat Sig22 = cov.subcube(endm, endm, k, endm, endm, k);
+			var1 = var1+ pi(k) * Sig22(0,0) + pi(k) * mug(k)* mug(k);
+			var2 = var2 + pi(k) * mug(k);
+		}
+		double V_approx = var1 - var2* var2;
+		
+
+
 		Vi = calVar(mui);
 		//Si.push_back(Vi / V);
 
 		if (Opt == 'T')
 		{
-			Si.push_back(1 - Vi / V); // total
+			Si.push_back(1 - Vi / V_approx); // total
 		}
 		else
 		{
-			Si.push_back(Vi / V);   // main
+			Si.push_back(Vi / V_approx);   // main
 		}
 
-		printf("GSA i=%i, Si=%.2f, K=%i \n", nc + 1, Si[nc], Kos);
+		printf("GSA i=%i, Si=%.2f, K=%i, %c \n", nc + 1, Si[nc], Kos, Opt);
 
 		if (isinf(Si[nc]) || isnan(Si[nc]))
 		{

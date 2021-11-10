@@ -128,29 +128,30 @@ jsonInput::jsonInput(string workDir)
 				theErrorFile.close();
 				exit(-1);
 			}
-
-			if (distName.compare("constant") == 0) {
-				constIdx.push_back(count);
-				nco++;
-				count++;
-				continue;
-			}
-			if ((distName.compare("discrete") == 0) && (inpTypeSub.compare("PAR")) == 0) {
-				if (elem[pnames[0]].size() == 1) {
-					// discrete distribution with only one quantity = constant
-					constIdx.push_back(count);
-					nco++;
-					count++;
-					continue;
-				}
-			}
-
-				// discrete distribution with only one quantity = constant
+			
 			resampIdx.push_back(count);
 			nre++;
 			count++;
 			continue;
 		}
+
+
+		if (distName.compare("constant") == 0) {
+			constIdx.push_back(count);
+			nco++;
+			count++;
+			continue;
+		}
+		if ((distName.compare("discrete") == 0) && (inpTypeSub.compare("PAR")) == 0) {
+			if (elem[pnames[0]].size() == 1) {
+				// discrete distribution with only one quantity = constant
+				constIdx.push_back(count);
+				nco++;
+				count++;
+				continue;
+			}
+		}
+
 		// save name of random variable etc
 		rvNames.push_back(elem["name"]);
 		distNames.push_back(distName);
