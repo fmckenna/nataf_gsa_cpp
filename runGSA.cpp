@@ -17,7 +17,7 @@ runGSA::runGSA(vector<vector<double>> xval,
 	nrv = xval[0].size();
 	ncombs = combs_tmp.size(); 
 	int nqoi = gmat[0].size();
-	Kos = std::min(Kos, int(nmc / 20));
+	Kos = std::min(Kos, int(ceil(nmc / 20.0)));
 
 	// for each QoI
 	for (int j = 0; j < nqoi; j++) {
@@ -183,13 +183,16 @@ vector<double> runGSA::doGSA(vector<double> gval,int Ko,char Opt)
 
 		while (1) {
 			status = model.learn(data, Kos, maha_dist, static_subset, 500, 500, V * 1.e-15, false);// max kmeans iter = 100, max EM iter = 200, convergence variance = V*1.e-15
+			if (status == false) {
+				printf("%i", Kos);
+			}
 			logL = model.sum_log_p(data);
 			if ((logL < oldLogL) || (Kos >= Kthres)) {
 				break;
 			} else {
 				oldLogL = logL;
 				Kos = Kos + 1;
-				printf("increasing Ko to %i, ll=%.f3\n", Kos, logL);
+				//printf("increasing Ko to %i, ll=%.f3\n", Kos, logL);
 			}
 		}
 		printf("FINAL Ko = %i \n", Kos);
