@@ -174,18 +174,15 @@ vector<double> runGSA::doGSA(vector<double> gval,int Ko,char Opt)
 		int Kthres;
 		if (Opt == 'T')
 		{
-			Kthres = nmc/100; // total
+			Kthres = std::max(nmc/100,100); // total
 		}
 		else
 		{
-			Kthres = nmc/10;   // main
+			Kthres = std::max(nmc/10,100);   // main
 		}
 
 		while (1) {
 			status = model.learn(data, Kos, maha_dist, static_subset, 500, 500, V * 1.e-15, false);// max kmeans iter = 100, max EM iter = 200, convergence variance = V*1.e-15
-			if (status == false) {
-				printf("%i", Kos);
-			}
 			logL = model.sum_log_p(data);
 			if ((logL < oldLogL) || (Kos >= Kthres)) {
 				break;
