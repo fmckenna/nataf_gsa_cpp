@@ -4,9 +4,16 @@ project(nataf_gsa_project)
 
 
 # sy- add openmp
-find_package(OpenMP)
 
+find_package(OpenMP REQUIRED) # Find the package
+#find_package(MPI)
 
+#if (APPLE)
+#	#SET(CMAKE_C_COMPILER /usr/bin/gcc-11)
+#	#SET(CMAKE_CXX_COMPILER /usr/bin/g++)
+#	SET(CMAKE_C_COMPILER /usr/local/bin/gcc-11)
+#	SET(CMAKE_CXX_COMPILER /usr/local/bin/g++-11)
+#endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -29,7 +36,7 @@ set(SOURCES main.cpp
 	    jsonInput.cpp
 	    uniformDist.cpp
 	    chiSquaredDist.cpp
-	    lognormalDIst.cpp
+	    lognormalDist.cpp
 	    weibullDist.cpp
 	    discreteDist.cpp)
 
@@ -61,5 +68,5 @@ endif()
 install(TARGETS nataf_gsa DESTINATION bin)
 
 #add_definitions(-D_ITERATOR_DEBUG_LEVEL=0) 
-add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
+#add_definitions(-D_ITERATOR_DEBUG_LEVEL=2) 
 

@@ -48,7 +48,9 @@ int main(int argc, char** argv)
 	auto start = std::chrono::high_resolution_clock::now();
 
 
+
 	theErrorFile.open(workDir+"/dakota.err",std::ofstream::out);
+	//theErrorFile.open((workDir+"/dakota.err").c_str(),std::ofstream::out );
 
 	if (!theErrorFile.is_open()) {
 		errMsg = "Error running UQ engine: Failed to creat Dakota.err at " + workDir;
@@ -145,7 +147,7 @@ int main(int argc, char** argv)
 		//
 		//	(5) Global sensitivity analysis
 		//
-		int Kos = 25;
+		int Kos = 1;
 		runGSA GsaResults(xvals, gvals, inp.groups, Kos);
 		//
 		//	Write  dakota.out

@@ -178,8 +178,10 @@ ERANataf::ERANataf(jsonInput inp)
 			RhozMat(i, j) = Rhoz[i][j];
 		}
 	}
-	RhozInv = RhozMat.inverse();
 
+	if (nrv>0) {
+	    RhozInv = RhozMat.inverse();
+	}
 	// Cholesky decomposition of correlation matrix
 	Eigen::LLT<Eigen::MatrixXd> llt(RhozMat);
 	
@@ -600,14 +602,15 @@ vector<double> ERANataf::simulateAppOnce(int i, string workingDirs, string copyD
 	//
 
 	std::string workflowDriver = "workflow_driver";
-	if ((osType.compare("Windows") == 0) && (runType.compare("runningLocal") == 0))
-		workflowDriver = "workflow_driver.bat >nul 2>nul";
-
+	if ((osType.compare("Windows") == 0) && (runType.compare("runningLocal") == 0)) {
+	    workflowDriver = "workflow_driver.bat";
+        //workflowDriver = "workflow_driver.bat >nul 2>nul";
+	}
 	string workflowDriver_string = "cd " + workDir + " && " + workDir + "/" + workflowDriver;
 
 	const char* workflowDriver_char = workflowDriver_string.c_str();
 	system(workflowDriver_char);
-	if (i == 0) {
+	if (i == 1) {
 		std::cout << workflowDriver_char << "\n\n";
 	}
 	//
