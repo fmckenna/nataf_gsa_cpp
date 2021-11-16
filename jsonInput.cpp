@@ -32,7 +32,7 @@ jsonInput::jsonInput(string workDir)
 	} else
 	{
 		//*ERROR*
-		std::string errMsg = "Error reading json: 'Forward Analysis' or 'Sensitivity Analysis' backend is called, but the user requested " + UQjson["UQ_Method"]["uqType"];
+	  std::string errMsg = "Error reading json: 'Forward Analysis' or 'Sensitivity Analysis' backend is called, but the user requested " + UQjson["UQ_Method"]["uqType"].get<std::string>();
 		std::cout << errMsg << "\n";
 		theErrorFile << errMsg << std::endl;
 		theErrorFile.close();
